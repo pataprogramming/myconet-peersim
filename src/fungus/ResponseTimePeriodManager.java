@@ -41,8 +41,8 @@ public class ResponseTimePeriodManager {
     numberOfJobsInPeriod = new int[numberOfCycles];
     jobsInPeriod = new long[numberOfCycles];
 
-    numberOfJobs = (int) (BurstJobGenerator.jobRatio * TypeObserver
-                          .getTotalCapacity());
+    numberOfJobs = (int) (JobGenerator.jobRatio *
+                          TypeObserver.getTotalCapacity());
 
     for (int i = 0; i < numberOfCycles; i++) {
       numberOfJobsInPeriod[i] = numberOfJobs;
