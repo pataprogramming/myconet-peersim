@@ -1,0 +1,136 @@
+package fungus;
+
+import java.lang.*;
+import java.util.*;
+import java.util.logging.*;
+import peersim.cdsim.*;
+import peersim.core.*;
+import peersim.config.*;
+
+public class HyphaData implements Protocol {
+    private static final String PAR_MYCOCAST_PROTO = "mycocast_proto";
+    private static final String PAR_IDEAL_IMMOBILE = "ideal_immobile";
+    private static final String PAR_IDEAL_HYPHAE = "ideal_hyphae";
+    private static final String PAR_IDEAL_BIOMASS = "ideal_biomass";
+    private static final String PAR_MAX_CAPACITY = "max_capacity";
+
+    private static int mycocastPid;
+
+    private static Logger log = Logger.getLogger(HyphaData.class.getName());
+
+    private int max_capacity;
+    private int ideal_immobile;
+    private int ideal_hyphae;
+    private int ideal_biomass;
+    private HyphaType state;
+    private Node myNode;
+
+    public HyphaData(String prefix) {
+        max_capacity = 13;
+        ideal_immobile = 2;
+        ideal_hyphae = 3;
+        ideal_biomass = 10;
+        state = HyphaType.BIOMASS;
+
+        ideal_immobile = Configuration.getInt(prefix + "." + PAR_IDEAL_IMMOBILE);
+        ideal_hyphae = Configuration.getInt(prefix + "." + PAR_IDEAL_HYPHAE);
+        ideal_biomass = Configuration.getInt(prefix + "." + PAR_IDEAL_BIOMASS);
+        max_capacity = Configuration.getInt(prefix + "." + PAR_MAX_CAPACITY);
+    }
+
+    public void nextCycle(Node node, int pid) {
+        myNode = node;
+    }
+
+    public Object clone() {
+        HyphaData ret = null;
+        try {
+            ret = (HyphaData) super.clone();
+        } catch (CloneNotSupportedException e) {
+            // Never happens
+        }
+        return ret;
+    }
+
+    public String toString() {
+        String ret = "<" + state + " cap: " + max_capacity + ">";
+        return ret;
+    }
+
+    public int get_capacity() {
+        return max_capacity;
+    }
+
+    public int get_max() {
+        return max_capacity;
+    }
+
+    public int get_ideal_biomass() {
+        return ideal_biomass;
+    }
+
+    public int get_ideal_hyphae() {
+        return ideal_hyphae;
+    }
+
+    public HyphaType get_state() {
+        return state;
+    }
+
+    public boolean isBiomass() {
+        return (state == HyphaType.BIOMASS);
+    }
+
+    public boolean isHypha() {
+        return !(state == HyphaType.BIOMASS);
+    }
+
+    public boolean isExtending() {
+        return (state == HyphaType.EXTENDING);
+    }
+
+    public boolean isBranching() {
+        return (state == HyphaType.BRANCHING);
+    }
+
+    public boolean isImmobile() {
+        return (state == HyphaType.IMMOBILE);
+    }
+
+    public void become(Node n, HyphaType t) {
+        log.finer(n.getID() + " BECOMES " + t + " (WAS " + this.state + ")");
+        state = t;
+        MycoCast mycocast = (MycoCast) n.getProtocol(mycocastPid);
+        mycocast.become(n, t);
+    }
+
+    public void becomeBiomass(Node n) {
+        become(n, HyphaType.BIOMASS);
+    }
+
+    public void becomeExtending(Node n) {
+        become(n, HyphaType.EXTENDING);
+    }
+
+    public void becomeBranching(Node n) {
+        become(n, HyphaType.BRANCHING);
+    }
+
+    public void becomeImmobile(Node n) {
+        become(n, HyphaType.IMMOBILE);
+    }
+
+    public void set_max(int max) {
+        this.max_capacity = max;
+    }
+
+    public void set_ideal_biomass(int ideal) {
+        this.ideal_biomass = ideal;
+    }
+
+    public void set_ideal_hyphae(int ideal) {
+        this.ideal_hyphae = ideal;
+    }
+
+    public void pack() {}
+}

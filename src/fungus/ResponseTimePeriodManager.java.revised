@@ -1,0 +1,115 @@
+package fungus;
+
+import java.util.logging.Logger;
+
+import peersim.cdsim.CDSimulator;
+import peersim.config.Configuration;
+
+public class ResponseTimePeriodManager {
+
+    // private int[] numberOfJobsInPeriod;// was remaining jobs in period?
+    private Map<Job,PeriodInfo> jobIndex; // lookup PeriodInfo for a Job
+    private List<PeriodInfo> periodInfo;
+
+    private int numberOfJobs;
+    private double theoreticResponseTime;
+
+    private static Logger log = Logger.getLogger(ResponseTimePeriodManager.class
+                                                 .getName());
+    private int currentPeriod = -1;
+
+    private class PeriodInfo {
+        public int period;
+        public int outstandingJobs = 0;
+        public int numberOfJobs = 0;
+        public int totalCapacity; // Available capacity this period
+        public int processingTime = 0;
+        public double actualResponseTime = 0.0;
+
+        public PeriodInfo() {
+            this.period = period; // Get from containing class when created
+            totalCapacity = TypeObserver.getTotalCapacity();
+
+            public double computeActualResponseTime() {
+
+            }
+
+            public double computeTheoreticResponseTime() {
+                double C = totalCapacity;
+                double J = numberOfJobs;
+                double N = Math.floor(J / C);
+
+                return ((N + 1) / J) * (((C * N) / 2) + (J / C - N));
+            }
+        }
+    }
+
+    public ResponseTimePeriodManager() {
+        //int numberOfCycles = Configuration.getInt(CDSimulator.PAR_CYCLES);
+        //numberOfJobsInPeriod = new ArrayList<Integer>();
+        jobIndex = new HashMap<Job,PeriodInfo>();
+        periodInfo = new ArrayList<PeriodInfo>();
+
+        // numberOfJobs = (int) (JobGenerator.jobRatio * TypeObserver
+        //                       .getTotalCapacity());
+
+        // for (int i = 0; i < numberOfCycles; i++) {
+        //     numberOfJobsInPeriod[i] = numberOfJobs;
+        //     jobsInPeriod[i] = 0;
+        // }
+    }
+
+    public void nextPeriod() {
+        period++;
+        periodInfo.add(new PeriodInfo());
+    }
+
+    public void registerJob(Job j) {
+        PeriodInfo info = periodInfo.get(period); // current period
+
+        info.outstandingJobs += 1;
+        info.numberOfJobs += 1;
+
+        jobIndex.put(j,period);
+    }
+
+    public void completeJob(Job j) {
+        int info = jobIndex.get(job);
+
+        jobIndex.remove(j);
+        info.outstandingJobs -= 1;
+        info.processingTime += j.completionTime - j.creationTime + 1;
+
+        // int jobPeriod = j.id / numberOfJobs;
+        // numberOfJobsInPeriod[jobPeriod]--;
+        // jobsInPeriod[jobPeriod] += j.completionTime - j.creationTime + 1;
+    }
+
+    public double getResponseTimeOptimality() {
+        return theoreticResponseTime / getMeasuredResponseTime();
+    }
+
+    public double getMeasuredResponseTime() {
+
+        int period = 0;
+        double responseTimeSum = 0;
+        int partialJobs = 0;
+
+        PeriodInfo info = periodInfo.get(period);
+        while (info. == 0
+               && period < trackedJobs.size() - 1) {
+            responseTimeSum = jobsInPeriod.get(period);
+            period++;
+        }
+
+        //if (period < numberOfJobsInPeriod.length - 1) {
+        //      responseTimeSum += jobsInPeriod[period];
+        //      partialJobs = numberOfJobs - numberOfJobsInPeriod[period];
+        //}
+
+        //log.severe(responseTimeSum + " " + numberOfJobs);
+        //return responseTimeSum / (partialJobs + period * numberOfJobs);
+        return responseTimeSum / numberOfJobs;
+    }
+
+}

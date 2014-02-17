@@ -1,0 +1,399 @@
+####################################################################
+# Basic Experiment Configuration
+####################################################################
+
+# Set a meaningful experiment name that will be parsable by your scripts
+config.basename example-config
+
+# Number of peers in the network
+network.size 1000
+# Length of simulation
+simulation.cycles 100
+
+# Only set a random seed if you want a reproducible scenario
+#random.seed 1234567889
+
+
+
+####################################################################
+# Boilerplate (shouldn't need changing)
+####################################################################
+
+network.node fungus.MycoNode
+network.node.mycocast_proto myc
+network.node.hyphadata_proto dat
+network.node.hyphalink_proto lnk
+network.node.fungalgrowth_proto fng
+control.shf Shuffle
+
+init.state fungus.StateInitializer
+init.state.initial_state BIOMASS
+init.clean fungus.HyphaDataCleanerInitializer
+
+control.cleanup fungus.CleanupControl
+control.cleanup.at simulation.cycles + 1
+control.cleanup.FINAL
+
+
+####################################################################
+# Core Myconet configuration
+####################################################################
+
+protocol.myc fungus.MycoCast
+protocol.myc.cache 20
+
+protocol.dat fungus.HyphaData
+#protocol.dat.ideal_immobile 3
+protocol.dat.ideal_hyphae 5
+protocol.dat.ideal_biomass 12
+protocol.dat.ideal_other_hyphae 2
+protocol.dat.other_biomass_ratio 2.0
+protocol.dat.max_capacity 15
+protocol.dat.bulwark_min 4.0
+protocol.dat.bulwark_max 6.0
+
+# Assign node capacities...note these can't be set in a protocol constructor
+init.pow fungus.PowerLawInitializer
+init.pow.alpha 2
+init.pow.max 50
+
+protocol.lnk fungus.HyphaLink
+
+# Chance of an immobile peer growing a new random hyphal link each cycle
+config.immobile.spawn_prob 0.1
+
+protocol.fng fungus.FungalGrowth
+protocol.fng.period 1
+protocol.fng.spawn_prob 0.1
+protocol.fng.start_cycle 1
+
+# strategy_map MUST BE SET TO MATCH THE SCENARIO!
+# strategy_map sets up the rules to be followed by nodes, mapping
+# the current node HyphaType (i.e., protocol state) to a
+# DynamicsStrategy.  Must point to a class that extends
+# DynamicsStrategyMap
+
+# Map for core Myconet, no clustering logic
+protocol.fng.strategy_map fungus.BasicMyconetStrategyMap
+
+# Map for clustering scenario where nodes have a single service type
+#protocol.fng.strategy_map fungus.SinglyTypedMyconetStrategyMap
+
+# Map for new HITAP adapation strategy
+#protocol.fng.strategy_map fungus.SemiBulwarkStrategyMap
+
+####################################################################
+# Setup for clustering (and thus Mycoload) with singly typed nodes
+####################################################################
+
+# Assign service types to nodes
+init.typ fungus.TypeInitializer
+init.typ.num_types 1
+#init.typ.num_types 6
+init.typ.uniform_types false
+
+## # Don't use this.
+## #init.two fungus.TwoClassesInitializer
+## #init.two.fraction_of_primary_nodes 0.7
+## #init.two.capacity_of_primary_nodes 3
+## #init.two.capacity_of_secondary_nodes 7
+
+
+####################################################################
+# Mycoload Job Scenario
+####################################################################
+
+#control.jc fungus.JobController
+
+#control.gen fungus.JobGenerator
+control.gen.jobratio 0.7
+control.gen.jobsize 1
+control.gen.period 1
+control.gen.start 2
+control.gen.end simulation.cycles + 1
+control.gen.varied false
+control.gen.single_entry_point false
+
+#protocol.job fungus.JobProcessor
+protocol.job.hyphadata_proto dat
+
+#protocol.load fungus.LoadBalancer
+protocol.load.hyphadata_proto dat
+protocol.load.hyphalink_proto lnk
+protocol.load.neighborhood_balancing false
+protocol.load.start_cycle 1
+protocol.load.period 1
+
+
+####################################################################
+# Use this for non-HITAP scenarios
+####################################################################
+
+config.join_strategy fungus.NullJoinStrategy
+
+####################################################################
+# End non-HITAP configuration
+####################################################################
+
+
+####################################################################
+# Use this for HITAP scenarios
+####################################################################
+network.node.failurealerter_proto fail
+network.node.chemicalmanager_proto chem
+
+#config.join_strategy fungus.MirrorBulwarkJoinStrategy
+#config.join_strategy fungus.NullJoinStrategy
+#config.join_strategy fungus.EmitAlertJoinStrategy
+config.alert.diffusion_rate 0.3
+config.alert.decay_rate 0.15
+config.alert.max_concentration 250.0
+# ##config.linearfailure.scale 3.0
+# ##config.linearfailure.bulwark_scale 2.0
+config.quadraticfailure.sq 0.5
+config.quadraticfailure.li -2.0
+config.quadraticfailure.co 0.0
+config.thresholdbulwark.threshold 50.0
+config.delayinhibition.bulwark_delay 1
+config.delayinhibition.revert_delay 5
+config.metabolism.normal_rate 0.0
+config.metabolism.bulwark_rate 0.0
+
+protocol.fail fungus.FailureAlerter
+# Only uncomment one failure_strategy; quadratic is used in the paper
+# ##protocol.fail.failure_strategy fungus.LinearFailureStrategy
+# protocol.fail.failure_strategy fungus.QuadraticFailureStrategy
+#protocol.fail.bulwark_strategy fungus.ThresholdBulwarkStrategy
+#protocol.fail.inhibition_strategy fungus.DelayInhibitionStrategy
+#protocol.fail.metabolism_strategy fungus.FlatMetabolismStrategy
+#protocol.fail.clear_on_revert true
+
+# Don't use anything but NullParentStrategy if using a BulwarkStrategy
+# Also needs a SemiBulwarkStrategy or other parent-aware biomass implementation
+# ## protocol.fail.parent_strategy fungus.NullParentStrategy
+# protocol.fail.failure_strategy fungus.QuadraticFailureStrategy
+protocol.fail.failure_strategy fungus.NullFailureStrategy
+protocol.fail.bulwark_strategy fungus.NullBulwarkStrategy
+protocol.fail.inhibition_strategy fungus.DelayInhibitionStrategy
+protocol.fail.metabolism_strategy fungus.FlatMetabolismStrategy
+protocol.fail.clear_on_revert false
+
+protocol.chem fungus.ChemicalManager
+protocol.chem.start_cycle 1
+protocol.chem.period 1
+
+# For testing only, do not enable
+## # control.chemtest fungus.RandomChemicalGenerator
+####################################################################
+# End HITAP
+####################################################################
+
+
+####################################################################
+# Churn Scenario
+####################################################################
+control.dnet Nodulator
+control.dnet.add -0.00
+control.dnet.minsize 0
+control.dnet.maxsize 100000
+control.dnet.from 1
+control.dnet.to	simulation.cycles + 1
+control.dnet.type all
+control.dnet.substitute false
+control.dnet.period 1
+control.dnet.poisson false
+control.dnet.init.state fungus.StateInitializer
+control.dnet.init.state.initial_state BIOMASS
+control.dnet.init.clean fungus.HyphaDataCleanerInitializer
+
+
+####################################################################
+# Attack Scenario
+####################################################################
+control.dnet2 Nodulator
+control.dnet2.add -0.8
+control.dnet2.minsize 10
+control.dnet2.maxsize 100000
+control.dnet2.from 20
+control.dnet2.to 20
+control.dnet2.type immobile
+control.dnet2.substitute false
+control.dnet2.period 1
+control.dnet2.poisson false
+control.dnet2.init.state fungus.StateInitializer
+control.dnet2.init.state.initial_state BIOMASS
+control.dnet2.init.clean fungus.HyphaDataCleanerInitializer
+
+
+####################################################################
+# Logging
+####################################################################
+
+control.lo fungus.LogObserver
+# log_level must be stepped up in order to use node-specific
+# monitoring in visualizer
+control.lo.log_level INFO
+control.lo.console_level INFO
+
+#control.lo.classes.JobGenerator JobGenerator
+#control.lo.classes.JobController JobController
+
+#control.lo.classes.JobProcessor JobProcessor
+#control.lo.classes.HyphaData HyphaData
+
+# If specific classes are referenced, only those will logged
+#control.lo.classes.Nodulator Nodulator
+#control.lo.classes.FungalGrowth FungalGrowth
+#control.lo.classes.ChemicalManager ChemicalManager
+#control.lo.classes.Chemical Chemical
+#control.lo.classes.RandomChemicalGenerator RandomChemicalGenerator
+
+control.state fungus.StateObserver
+control.state.protocol myc
+
+
+####################################################################
+# Observers
+#
+# Be sure to think hard about ordering requirements, and specify
+# in order.control if necessary.  Only enable observers that make
+# sense for the scenario under consideration
+####################################################################
+
+# LOTS of other stuff depends on the JungGraphObserver
+control.jg fungus.JungGraphObserver
+control.jg.period 1
+control.jg.walk_delay 500
+
+# Monitor stats for Node service types (i.e., Mycoload clustering)
+control.to fungus.TypeObserver
+control.to.period 10
+
+# Monitor job processing rates (for Mycoload job scenarios)
+#control.ro fungus.ResponseTimeObserver
+
+# Count number of connected components
+#control.co fungus.ConnectivityObserver
+#control.co.period 10
+
+# Node utilization from a Myconet perspective (only valid for Basic
+# scenarios, not clustering or HITAP
+#control.uo fungus.UtilizationObserver
+#control.uo.period 1
+
+# Count messages sent
+control.msg fungus.MessageObserver
+
+# Count optimal number of superpeers (needs rejiggering for clustering
+# scenarios)
+control.oo fungus.OptimalityObserver
+control.oo.period 1
+
+# Statistics for node degrees
+control.degree fungus.DegreeControl
+
+
+####################################################################
+# Visualization
+#
+# GUI display during the run
+####################################################################
+
+#control.jv fungus.JungVisualizer
+control.jv.junggraph_proto jg
+control.jv.show_edges true
+control.jv.label_nodes true
+control.jv.image_dir capture
+
+# Setting scale_shapes false gives small nodes
+# Setting scale_shapes true gives nodes with sizes log-scaled by capacity
+#   ...but probably need to use longer edge lengths to make
+#   this look decent.  Also, will need to be updated if used in
+#   scenarios where the bulwark state is enabled
+control.jv.scale_shapes false
+
+# Most of the scenario-specific visualization setup has been split out
+# into VisualizerTransformers.  Extend this class or a subclass and
+# override the appropriate methods to tweak the display.  Start by
+# using one of the four below appropriate to the scenario
+
+# (1) Basic Myconet...nodes colored by protocol state (doesn't handle bulwark)
+control.jv.transformers fungus.VisualizerTransformers
+
+# (2) Clustering...nodes colored by service type (for single-service peers)
+#control.jv.transformers fungus.ClusteringVisualizerTransformers
+
+# (3) Job visualization...node outline colored by service type, node fill
+# shades from blue (under) to white (balanced) to red (over) relative
+# to an ideal job distribution for jobs of each node's type
+#control.jv.transformers fungus.LoadVisualizerTransformers
+
+# (4) HITAP Scenario...nodes colored by AlertHormone concentration. Green
+# is none shading to yellow (just below threshold), then red (at or
+# above threshold) to magenta (max concentration).  This is the only
+# visualizer that will handle bulwark peers sensibly; the others must
+# be updated if bulwark peers are to be used with them
+#control.jv.transformers fungus.HITAPVisualizerTransformers
+
+
+####################################################################
+# Charts
+#
+# Displayer of statistics during run
+####################################################################
+
+# Chart showing peers in certain protocol states
+#control.pcv fungus.PeerRatioChartFrame
+
+## ## #Chart showing utilization levels (probably needs updating before use)
+## #control.ucv fungus.UtilizationChartFrame
+
+
+####################################################################
+# Output File Creation
+#
+# Ensure that these controls run AFTER all other Observers
+####################################################################
+
+# Note that Observers must register their Metrics with the ExperimentWriter
+control.ew fungus.ExperimentWriter
+
+
+# The following output methods may need updating before use:
+
+## # For graphviz output
+## #control.no fungus.NeatoObserver
+## #control.no.filename_base test6
+
+## # Graph data from entire run formatted for reading by Clojure
+## #control.gw fungus.GraphWriter
+
+## # GraphML output of the graph maintained by JUNG for each cycle
+## #control.jgw fungus.JungGraphWriter
+
+## # Stream of graph events (adds, parts, neighbor changes)
+## #control.evt fungus.EventWriter
+
+control.disconnect fungus.DisconnectControl
+#control.disconnect.parent_strategy fungus.TotalFailureParentStrategy
+control.disconnect.parent_strategy fungus.NullParentStrategy
+
+
+####################################################################
+# Order
+#
+# Be sure you understand PeerSim's ordering rules to get things
+# executing in the proper order
+####################################################################
+
+#control.protocols peersim.cdsim.FullNextCycle
+
+#order.control lo state jg to jc gen protocols oo jv
+order.control lo state jg to oo ew
+
+#order.control lo state jg to jc co gen msg uo oo ro
+#order.control shf dnet dnet2 disconnect protocols lo state jg oo degree
+#jv
+
+order.protocol fail dat lnk fng chem
+#order.protocol fail dat lnk fng load chem

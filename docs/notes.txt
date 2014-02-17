@@ -1,0 +1,86 @@
+A regular node has a capacity, which is equivalent to biomass
+Superpeers are the hyphae
+
+Hyphae are either:
+ * Immobile (are connected to enough superpeers)
+ * Branching (are not connected to enough superpeers)
+ * Extending (have not concentrated enough biomass)
+
+If an hypha is undercapacity:
+ * Immobile hyphae send signals along each connected hypha requesting
+  biomass
+ * Two adjacent undercapacity hyphae will attempt to merge if their
+  capacities allow
+ * Branching hyphae will attempt to acquire new superpeers
+ * Extending hyphae will attempt to acquire new biomass nodes
+If a hypha is overcapacity:
+ * If it is a branching hypha it will 
+
+Nodes have a capacity; capacity
+The biomass of a non-hyphal node is its capacity
+The biomass of a hyphal node is its own capacity plus the capacity of
+its connected non-hyphal nodes 
+
+WHAT THINGS ARE:
+Nodes are either biomass ("potential hypha") an actual hypha
+
+Hypha are either immobile, branching, or extending
+Extending hyphae discover and absorb new biomass
+Branching hyphae grow new hypha and absorb biomass from extending hyphae
+Immobile hyphae concentrate biomass from branches
+
+RULES
+
+BIOMASS RULES
+
+If an immobile hypha does not have enough biomass:
+ * absorb biomass from a connected branching or extending hypha
+
+If a branching hypha does not have enough biomass:
+ * absorb biomass from an extending hypha
+
+If a biomass node is unattached, associated with a random extending hypha
+
+HYPHAL RULES
+
+Immobile hypha must maintain sufficient hypha.  They have two separate
+hyphal capacities: connected immobile hyphae and connected branching
+hyphae
+
+If an immobile hypha does not have enough connected immobile hypha:
+ * grow a connection to another known immobile hypha (this helps ensure
+   the continguity of the network
+
+If an immobile hypha does not have enough connected branching hypha::
+ * if a branch is sufficiently undercapacity, absorb that branch
+ * if no branches are undercapacity, become a branching hypha
+
+If an immobile hypha has too many connected hyphae:
+ * For each extra hypha, pass it to a branch
+
+If a branching hypha is undercapacity and has no extending nodes:
+ * become an extending hypha
+
+If a branching hypha does not have enough connected extending hypha:
+ * "grow" a new hypha in one of its connected biomass nodes
+
+If a branching hypha has too many connected extending hypha:
+ * Become an immobile hypha, promote the highest-capacity extending
+   hypha to a branching hypha, and pass excess extending hypha to the
+   new branching hypha
+
+If an extending hypha is at capacity:
+ * Become a branching hypha
+
+HEALING AND RECOVERY RULES
+
+If a hypha loses its connection with a neighboring hypha (hyphal
+connection is dead):
+ * self-heal by connecting to another hypha
+ * the lowest-ranked hypha does the connecting (i.e., if an extending
+ hypha loses its connection to a branching hypha.
+
+If there are insufficient hyphae below some overall threshhold,
+"spore" by generating new random extending hyphae.
+
+If a hypha is disconnected, connect to a random hypha
