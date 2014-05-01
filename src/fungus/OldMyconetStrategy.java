@@ -148,7 +148,7 @@ public class OldMyconetStrategy extends DynamicsStrategy {
          &&
          (myMaxBiomass.getHyphaData().getMaxCapacity()
           < maxNeighborBiomass.get(0).getHyphaData().getMaxCapacity())
-         ))
+        ))
     {
       log.fine(node + " IS STEALING BIOMASS NODE " +
                maxNeighborBiomass.get(0) + " FROM NODE " +

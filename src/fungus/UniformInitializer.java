@@ -29,47 +29,47 @@ import cern.jet.random.engine.*;
 import cern.jet.random.Distributions.*;
 
 public class UniformInitializer implements Control {
-    //private static final String PAR_CONSOLE_LEVEL = "console_level";
-    // private static final String PAR_LOG_LEVEL = "log_level";
-    private static final String PAR_MAX = "max";
+  //private static final String PAR_CONSOLE_LEVEL = "console_level";
+  // private static final String PAR_LOG_LEVEL = "log_level";
+  private static final String PAR_MAX = "max";
 
-    private static LogManager manager = LogManager.getLogManager();
-    private static Logger log = Logger.getLogger("fungus");
+  private static LogManager manager = LogManager.getLogManager();
+  private static Logger log = Logger.getLogger("fungus");
 
-    private final String name;
-    private final double max;
-    private int intmax;
-    //private final Level console_level;
-    //private final Level log_level;
-    //private final int pid;
+  private final String name;
+  private final double max;
+  private int intmax;
+  //private final Level console_level;
+  //private final Level log_level;
+  //private final int pid;
 
-    private cern.jet.random.engine.RandomEngine generator;
-    private cern.jet.random.Uniform distribution;
+  private cern.jet.random.engine.RandomEngine generator;
+  private cern.jet.random.Uniform distribution;
 
-    public UniformInitializer(String name) {
-        this.name = name;
-        max = Configuration.getDouble(name + "." + PAR_MAX);
-        intmax = (new Double(max)).intValue();
-        this.generator =
-            new cern.jet.random.engine.MersenneTwister(new java.util.Date());
-        this.distribution = new cern.jet.random.Uniform(1.0,max,generator);
-            //            new cern.jet.random.engine.MersenneTwister(new java.util.Date());
+  public UniformInitializer(String name) {
+    this.name = name;
+    max = Configuration.getDouble(name + "." + PAR_MAX);
+    intmax = (new Double(max)).intValue();
+    this.generator =
+        new cern.jet.random.engine.MersenneTwister(new java.util.Date());
+    this.distribution = new cern.jet.random.Uniform(1.0,max,generator);
+    //            new cern.jet.random.engine.MersenneTwister(new java.util.Date());
+  }
+
+  public int nextInt() {
+    return distribution.nextInt();
+  }
+
+  public boolean execute() {
+    MycoNode n;
+    HyphaData d;
+    for (int i = 1; i < Network.size(); i++) {
+      n = (MycoNode) Network.get(i);
+      d = n.getHyphaData();
+      d.setMax(nextInt());
     }
-
-    public int nextInt() {
-        return distribution.nextInt();
-    }
-
-    public boolean execute() {
-        MycoNode n;
-        HyphaData d;
-        for (int i = 1; i < Network.size(); i++) {
-            n = (MycoNode) Network.get(i);
-            d = n.getHyphaData();
-            d.setMax(nextInt());
-        }
-        return false;
-    }
+    return false;
+  }
 
 
 }

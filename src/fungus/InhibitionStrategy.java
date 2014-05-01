@@ -23,6 +23,6 @@ package fungus;
 //import com.google.common.base.Function;
 
 public interface InhibitionStrategy {
-    // return true to allow switch, false to inhibit
-    public abstract boolean apply(MycoNode n, HyphaType t, int switchAttempts);
+  // return true to allow switch, false to inhibit
+  public abstract boolean apply(MycoNode n, HyphaType t, int switchAttempts);
 }

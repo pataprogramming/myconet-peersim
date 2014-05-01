@@ -61,10 +61,10 @@ public class VisualizerTransformers {
 
   public Transformer<MycoNode,String> idNodeLabeller =
       new Transformer<MycoNode,String>() {
-    public String transform(MycoNode n) {
-      return Long.toString(n.getID());
-    }
-  };
+        public String transform(MycoNode n) {
+          return Long.toString(n.getID());
+        }
+      };
 
   public Transformer<MycoNode,String> getNodeLabeller() {
     return idNodeLabeller;
@@ -83,19 +83,19 @@ public class VisualizerTransformers {
 
   Transformer<MycoNode,Shape> fixedShapeTransformer =
       new Transformer<MycoNode,Shape>() {
-    public Shape transform(MycoNode n) {
-      HyphaData data = n.getHyphaData();
-      if (data.isExtending()) {
-        return extendingShape;
-      } else if (data.isBranching()) {
-        return branchingShape;
-      } else if (data.isImmobile()) {
-        return immobileShape;
-      } else {
-        return biomassShape;
-      }
-    }
-  };
+        public Shape transform(MycoNode n) {
+          HyphaData data = n.getHyphaData();
+          if (data.isExtending()) {
+            return extendingShape;
+          } else if (data.isBranching()) {
+            return branchingShape;
+          } else if (data.isImmobile()) {
+            return immobileShape;
+          } else {
+            return biomassShape;
+          }
+        }
+      };
 
 
 
@@ -158,39 +158,39 @@ public class VisualizerTransformers {
 
   public final CachingTransformer<MycoNode,Shape> scaledShapeTransformer =
       new CachingTransformer<MycoNode,Shape>() {
-    Map<ShapeKey,Shape> shapeMap = new HashMap<ShapeKey,Shape>();
+        Map<ShapeKey,Shape> shapeMap = new HashMap<ShapeKey,Shape>();
 
-    public void clear() {
-      shapeMap = new HashMap<ShapeKey,Shape>();
-    }
-
-    public Shape transform(MycoNode n) {
-      try {
-        HyphaData data = n.getHyphaData();
-        int cap = data.getCapacity();
-        ShapeKey k = new ShapeKey(new Integer(cap), data.getState());
-        if (shapeMap.containsKey(k)) {
-          return shapeMap.get(k);
+        public void clear() {
+          shapeMap = new HashMap<ShapeKey,Shape>();
         }
 
-        Shape ret;
+        public Shape transform(MycoNode n) {
+          try {
+            HyphaData data = n.getHyphaData();
+            int cap = data.getCapacity();
+            ShapeKey k = new ShapeKey(new Integer(cap), data.getState());
+            if (shapeMap.containsKey(k)) {
+              return shapeMap.get(k);
+            }
 
-        if (data.isExtending()) {
-          ret = makeExtendingShape(cap);
-        } else if (data.isBranching()) {
-          ret = makeBranchingShape(cap);
-        } else if (data.isImmobile()) {
-          ret = makeImmobileShape(cap);
-        } else {
-          ret = makeBiomassShape(cap);
+            Shape ret;
+
+            if (data.isExtending()) {
+              ret = makeExtendingShape(cap);
+            } else if (data.isBranching()) {
+              ret = makeBranchingShape(cap);
+            } else if (data.isImmobile()) {
+              ret = makeImmobileShape(cap);
+            } else {
+              ret = makeBiomassShape(cap);
+            }
+            shapeMap.put(k, ret);
+            return ret;
+          } catch (NullPointerException ex) {
+            return biomassShape;
+          }
         }
-        shapeMap.put(k, ret);
-        return ret;
-      } catch (NullPointerException ex) {
-        return biomassShape;
-      }
-    }
-  };
+      };
 
 
 
@@ -214,14 +214,14 @@ public class VisualizerTransformers {
 
   public final Transformer<MycoNode,Paint> nodeStatePaintTransformer =
       new Transformer<MycoNode,Paint>() {
-    public Paint transform(MycoNode n) {
-      HyphaData data = n.getHyphaData();
-      if (data.isBiomass()) { return Color.BLUE; }
-      else if (data.isExtending()) { return Color.RED; }
-      else if (data.isBranching()) { return Color.YELLOW; }
-      else { return Color.GREEN; }
-    }
-  };
+        public Paint transform(MycoNode n) {
+          HyphaData data = n.getHyphaData();
+          if (data.isBiomass()) { return Color.BLUE; }
+          else if (data.isExtending()) { return Color.RED; }
+          else if (data.isBranching()) { return Color.YELLOW; }
+          else { return Color.GREEN; }
+        }
+      };
 
 
   public Transformer<MycoNode,Paint> getNodeFillRenderer() {
@@ -238,17 +238,17 @@ public class VisualizerTransformers {
 
   public final Transformer<MycoEdge,Stroke> basicEdgeStrokeTransformer =
       new Transformer<MycoEdge,Stroke>() {
-    public Stroke transform(MycoEdge e) {
-      Pair<MycoNode> vertices = graph.getEndpoints(e);
-      HyphaData firstData = vertices.getFirst().getHyphaData();
-      HyphaData secondData = vertices.getSecond().getHyphaData();
-      if (firstData.isBiomass()) {
-        return biomassStroke;
-      } else {
-        return hyphalStroke;
-      }
-    }
-  };
+        public Stroke transform(MycoEdge e) {
+          Pair<MycoNode> vertices = graph.getEndpoints(e);
+          HyphaData firstData = vertices.getFirst().getHyphaData();
+          HyphaData secondData = vertices.getSecond().getHyphaData();
+          if (firstData.isBiomass()) {
+            return biomassStroke;
+          } else {
+            return hyphalStroke;
+          }
+        }
+      };
 
   public final Transformer<MycoNode,Paint> blackPaintTransformer =
       new Transformer<MycoNode,Paint>() {
@@ -284,22 +284,22 @@ public class VisualizerTransformers {
 
   public final Transformer<MycoEdge,Paint> basicEdgePaintTransformer =
       new Transformer<MycoEdge,Paint>() {
-    public Paint transform(MycoEdge e) {
-      try {
-        Pair<MycoNode> vertices = graph.getEndpoints(e);
-        HyphaData firstData = vertices.getFirst().getHyphaData();
-        HyphaData secondData = vertices.getSecond().getHyphaData();
-        if (secondData.isBiomass()) {
-          return transparent;
-        } else {
-          return Color.BLACK;
+        public Paint transform(MycoEdge e) {
+          try {
+            Pair<MycoNode> vertices = graph.getEndpoints(e);
+            HyphaData firstData = vertices.getFirst().getHyphaData();
+            HyphaData secondData = vertices.getSecond().getHyphaData();
+            if (secondData.isBiomass()) {
+              return transparent;
+            } else {
+              return Color.BLACK;
+            }
+          } catch (NullPointerException ex) {
+            log.fine("Null pointer caught");
+            return Color.RED;
+          }
         }
-      } catch (NullPointerException ex) {
-        log.fine("Null pointer caught");
-        return Color.RED;
-      }
-    }
-  };
+      };
 
   public Transformer<MycoEdge,Paint> getEdgeDrawPaintTransformer() {
     return basicEdgePaintTransformer;
@@ -309,17 +309,17 @@ public class VisualizerTransformers {
   // Edge length hints for SpringLayout
   public final Transformer<MycoEdge,Integer> basicEdgeLengthTransformer =
       new Transformer<MycoEdge,Integer>() {
-    public Integer transform(MycoEdge e) {
-      Pair<MycoNode> vertices = graph.getEndpoints(e);
-      HyphaData firstData = vertices.getFirst().getHyphaData();
-      HyphaData secondData = vertices.getSecond().getHyphaData();
-      if (firstData.isBiomass() || secondData.isBiomass()) {
-        return 50;
-      } else {
-        return 100;
-      }
-    }
-  };
+        public Integer transform(MycoEdge e) {
+          Pair<MycoNode> vertices = graph.getEndpoints(e);
+          HyphaData firstData = vertices.getFirst().getHyphaData();
+          HyphaData secondData = vertices.getSecond().getHyphaData();
+          if (firstData.isBiomass() || secondData.isBiomass()) {
+            return 50;
+          } else {
+            return 100;
+          }
+        }
+      };
 
 
   public Transformer<MycoEdge,Integer> getEdgeLengthTransformer() {
@@ -345,7 +345,7 @@ public class VisualizerTransformers {
 
   public boolean execute() {
     rangeScaled = false; // FIXME: Ugly...breaks if sizes change,
-                    // lots of unnecessary recalc otherwise
+    // lots of unnecessary recalc otherwise
     if (scaledShapeTransformer != null) {
       scaledShapeTransformer.clear(); // FIXME: ICK!
     }

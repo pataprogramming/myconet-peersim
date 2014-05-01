@@ -26,20 +26,19 @@ import java.awt.Color;
 import peersim.core.*;
 
 public class ColorWheel {
-    private static Random r = new java.util.Random(System.currentTimeMillis());
+  private static Random r = new java.util.Random(System.currentTimeMillis());
 
-    // n colors equally distributed around the HSB color wheel for an S and B
-    public static List<Color> getColorMap(int n, float s, float b) {
-        List<Color> ret = new ArrayList<Color>();
-        float step = 1.0f / (float) n;
+  // n colors equally distributed around the HSB color wheel for an S and B
+  public static List<Color> getColorMap(int n, float s, float b) {
+    List<Color> ret = new ArrayList<Color>();
+    float step = 1.0f / (float) n;
 
-        float h = r.nextFloat();
-        for (int i = 0; i < n; i++) {
-            ret.add(Color.getHSBColor(h, s, b));
-            h += step;
-        }
-
-        return ret;
+    float h = r.nextFloat();
+    for (int i = 0; i < n; i++) {
+      ret.add(Color.getHSBColor(h, s, b));
+      h += step;
     }
-}
 
+    return ret;
+  }
+}

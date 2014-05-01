@@ -328,29 +328,29 @@ public class HyphaLink implements Linkable, CDProtocol, Cleanable {
     return neighbors.getRandomOfType(myNode.getHyphaData().getType());
   }
 
-    public MycoNode getRandomSameHypha() {
-        return neighbors.getHyphae().getRandomOfType(myNode.getHyphaData().getType());
-    }
+  public MycoNode getRandomSameHypha() {
+    return neighbors.getHyphae().getRandomOfType(myNode.getHyphaData().getType());
+  }
 
   public MycoNode getNeighbor(int i) {
     return neighbors.get(i);
   }
 
-    public int getNeighborhoodCapacity() {
-        int cap = 0;
-        for (MycoNode n : neighbors.getType(myNode.getHyphaData().getType())) {
-            cap += n.getHyphaData().getCapacity();
-        }
-        return cap;
+  public int getNeighborhoodCapacity() {
+    int cap = 0;
+    for (MycoNode n : neighbors.getType(myNode.getHyphaData().getType())) {
+      cap += n.getHyphaData().getCapacity();
     }
+    return cap;
+  }
 
-    public int getNeighborhoodQueueLength() {
-        int len = 0;
-        for (MycoNode n : neighbors.getType(myNode.getHyphaData().getType())) {
-            len += n.getHyphaData().getQueueLength();
-        }
-        return len;
+  public int getNeighborhoodQueueLength() {
+    int len = 0;
+    for (MycoNode n : neighbors.getType(myNode.getHyphaData().getType())) {
+      len += n.getHyphaData().getQueueLength();
     }
+    return len;
+  }
 
   // Return a list of all nodes two jumps away in the graph
   public MycoList get2Neighbors() {

@@ -25,8 +25,8 @@ import peersim.config.*;
 public class NullFailureStrategy implements FailureStrategy {
 
   public Double apply(MycoNode thisNode, HyphaType thisType,
-                               int thisDegree, MycoNode failedNode,
-                               HyphaType failedType, int failedDegree) {
+                      int thisDegree, MycoNode failedNode,
+                      HyphaType failedType, int failedDegree) {
     return 0.0;
   }
 

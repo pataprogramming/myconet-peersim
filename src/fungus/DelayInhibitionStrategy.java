@@ -23,34 +23,34 @@ package fungus;
 import peersim.config.Configuration;
 
 public class DelayInhibitionStrategy implements InhibitionStrategy {
-    private static final String PREFIX = "config.delayinhibition.";
-    private static final String PAR_BULWARK_DELAY = PREFIX + "bulwark_delay";
-    private static final String PAR_REVERT_DELAY = PREFIX + "revert_delay";
+  private static final String PREFIX = "config.delayinhibition.";
+  private static final String PAR_BULWARK_DELAY = PREFIX + "bulwark_delay";
+  private static final String PAR_REVERT_DELAY = PREFIX + "revert_delay";
 
-    private int bulwarkDelay;
-    private int revertDelay;
+  private int bulwarkDelay;
+  private int revertDelay;
 
-    public DelayInhibitionStrategy() {
-        bulwarkDelay = Configuration.getInt(PAR_BULWARK_DELAY);
-        revertDelay = Configuration.getInt(PAR_REVERT_DELAY);
+  public DelayInhibitionStrategy() {
+    bulwarkDelay = Configuration.getInt(PAR_BULWARK_DELAY);
+    revertDelay = Configuration.getInt(PAR_REVERT_DELAY);
+  }
+
+  public boolean apply(MycoNode n, HyphaType t, int switchAttempts) {
+
+    if (t != HyphaType.BULWARK) {
+      // n not in bulwark state, determine whether to allow switch
+      if (switchAttempts > bulwarkDelay) {
+        return true;  // allow switch
+      } else {
+        return false; // inhibit
+      }
+    } else {
+      // n in bulwark state, determine whether to allow reversion
+      if (switchAttempts > revertDelay) {
+        return true;  // alow reversion
+      } else {
+        return false; // inhibit
+      }
     }
-
-    public boolean apply(MycoNode n, HyphaType t, int switchAttempts) {
-
-        if (t != HyphaType.BULWARK) {
-            // n not in bulwark state, determine whether to allow switch
-            if (switchAttempts > bulwarkDelay) {
-                return true;  // allow switch
-            } else {
-                return false; // inhibit
-            }
-        } else {
-            // n in bulwark state, determine whether to allow reversion
-            if (switchAttempts > revertDelay) {
-                return true;  // alow reversion
-            } else {
-                return false; // inhibit
-            }
-        }
-    }
+  }
 }

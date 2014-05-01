@@ -29,61 +29,61 @@ import cern.jet.random.engine.*;
 import cern.jet.random.Distributions.*;
 
 public class TypeInitializer implements Control {
-    public static final String PAR_NUM_TYPES = "num_types";
-    public static final String PAR_UNIFORM_TYPES = "uniform_types";
-    // private static final String PAR_CONSOLE_LEVEL = "console_level";
-    // private static final String PAR_LOG_LEVEL = "log_level";
+  public static final String PAR_NUM_TYPES = "num_types";
+  public static final String PAR_UNIFORM_TYPES = "uniform_types";
+  // private static final String PAR_CONSOLE_LEVEL = "console_level";
+  // private static final String PAR_LOG_LEVEL = "log_level";
 
-    private static LogManager manager = LogManager.getLogManager();
-    private static Logger log = Logger.getLogger("fungus");
+  private static LogManager manager = LogManager.getLogManager();
+  private static Logger log = Logger.getLogger("fungus");
 
-    private final String name;
+  private final String name;
 
-    private static int numTypes;
-    private static boolean uniformTypes;
+  private static int numTypes;
+  private static boolean uniformTypes;
 
-    protected static Random generator;
+  protected static Random generator;
 
 
-    public TypeInitializer(String name) {
-        this.name = name;
-        numTypes = Configuration.getInt(name + "." + PAR_NUM_TYPES);
-        uniformTypes = Configuration.getBoolean(name + "." + PAR_UNIFORM_TYPES);
+  public TypeInitializer(String name) {
+    this.name = name;
+    numTypes = Configuration.getInt(name + "." + PAR_NUM_TYPES);
+    uniformTypes = Configuration.getBoolean(name + "." + PAR_UNIFORM_TYPES);
 
-        HyphaData.numTypes = numTypes;
+    HyphaData.numTypes = numTypes;
 
-        if (generator == null) {
-            TypeInitializer.generator = CommonState.r;
-        }
+    if (generator == null) {
+      TypeInitializer.generator = CommonState.r;
     }
+  }
 
 
-    public static int getNumTypes() {
-        return numTypes;
+  public static int getNumTypes() {
+    return numTypes;
+  }
+
+  public static int typeSeed;
+
+
+  public static void initialize(MycoNode n, int type) {
+    n.getHyphaData().setType(type);
+  }
+
+  public static void initialize(MycoNode n) {
+    initialize(n,generator.nextInt(numTypes));
+  }
+
+  public boolean execute() {
+    MycoNode n;
+    typeSeed = generator.nextInt(numTypes);
+    for (int i = 0; i < Network.size(); i++) {
+      n = (MycoNode) Network.get(i);
+      if (uniformTypes) {
+        initialize(n, (typeSeed + i) % numTypes);
+      } else {
+        initialize(n);
+      }
     }
-
-    public static int typeSeed;
-
-
-    public static void initialize(MycoNode n, int type) {
-        n.getHyphaData().setType(type);
-    }
-
-    public static void initialize(MycoNode n) {
-        initialize(n,generator.nextInt(numTypes));
-    }
-
-    public boolean execute() {
-        MycoNode n;
-        typeSeed = generator.nextInt(numTypes);
-        for (int i = 0; i < Network.size(); i++) {
-            n = (MycoNode) Network.get(i);
-            if (uniformTypes) {
-                initialize(n, (typeSeed + i) % numTypes);
-            } else {
-                initialize(n);
-            }
-        }
-        return false;
-    }
+    return false;
+  }
 }

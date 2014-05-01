@@ -42,104 +42,104 @@ import org.apache.commons.collections15.*;
 import org.apache.commons.collections15.functors.*;
 
 public class MycoGraph extends DirectedSparseGraph<MycoNode,MycoEdge> {
-    private static List<VertexTypeFilter> filters =
-        new ArrayList<VertexTypeFilter>();
+  private static List<VertexTypeFilter> filters =
+      new ArrayList<VertexTypeFilter>();
 
-    private static Logger log =
-        Logger.getLogger(MycoGraph.class.getName());
+  private static Logger log =
+      Logger.getLogger(MycoGraph.class.getName());
 
-    public static VertexTypeFilter getFilter(int t) {
-        log.fine("looking for filter " + t);
-        // If predicates aren't created yet, create and cache
-        while (t >= filters.size()) {
-            filters.add(new VertexTypeFilter(filters.size()));
-        }
-        return filters.get(t);
+  public static VertexTypeFilter getFilter(int t) {
+    log.fine("looking for filter " + t);
+    // If predicates aren't created yet, create and cache
+    while (t >= filters.size()) {
+      filters.add(new VertexTypeFilter(filters.size()));
     }
+    return filters.get(t);
+  }
 
-    // Get List of subgraphs; subgraph i consists only of nodes of type i
-    public List<Graph<MycoNode,MycoEdge>> getTypeGraphs() {
-        List<Graph<MycoNode,MycoEdge>> ret =
-            new ArrayList<Graph<MycoNode,MycoEdge>>(HyphaData.numTypes);
-        for (int t = 0; t < HyphaData.numTypes; t++) {
-            VertexTypeFilter f = getFilter(t);
-            ret.add(f.transform(this));
-        }
-        log.finer("Returning " + ret.size() + " type graphs");
-        return ret;
+  // Get List of subgraphs; subgraph i consists only of nodes of type i
+  public List<Graph<MycoNode,MycoEdge>> getTypeGraphs() {
+    List<Graph<MycoNode,MycoEdge>> ret =
+        new ArrayList<Graph<MycoNode,MycoEdge>>(HyphaData.numTypes);
+    for (int t = 0; t < HyphaData.numTypes; t++) {
+      VertexTypeFilter f = getFilter(t);
+      ret.add(f.transform(this));
     }
+    log.finer("Returning " + ret.size() + " type graphs");
+    return ret;
+  }
 
-    public static Factory<Forest<MycoNode,MycoEdge>> typeForestFactory =
-        new Factory<Forest<MycoNode,MycoEdge>>() {
+  public static Factory<Forest<MycoNode,MycoEdge>> typeForestFactory =
+      new Factory<Forest<MycoNode,MycoEdge>>() {
         public Forest<MycoNode,MycoEdge> create() {
-            return new DelegateForest<MycoNode,MycoEdge>();
+          return new DelegateForest<MycoNode,MycoEdge>();
         }
-    };
+      };
 
-    /*public static Factory<UndirectedGraph<MycoNode,MycoEdge>>
-        undirectedGraphFactory =  new Factory<UndirectedGraph<MycoNode,MycoEdge>>() {
-        public UndirectedGraph<MycoNode,MycoEdge> create() {
-            return new UndirectedSparseMultigraph<MycoNode,MycoEdge>();
-        }
+  /*public static Factory<UndirectedGraph<MycoNode,MycoEdge>>
+    undirectedGraphFactory =  new Factory<UndirectedGraph<MycoNode,MycoEdge>>() {
+    public UndirectedGraph<MycoNode,MycoEdge> create() {
+    return new UndirectedSparseMultigraph<MycoNode,MycoEdge>();
+    }
     };
 
     public static Factory<MycoEdge> undirectedEdgeFactory =
-        new Factory<MycoEdge>() {
-        public MycoEdge create() {
-            return new MycoEdge();
-        }
+    new Factory<MycoEdge>() {
+    public MycoEdge create() {
+    return new MycoEdge();
+    }
     };
 
     public static UndirectedGraph<MycoNode,MycoEdge> toUndirected(MycoGraph g) {
-        return DirectionTransformer.toUndirected(g,
-                                                 undirectedGraphFactory,
-                                                 undirectedEdgeFactory,
-                                                 false);
+    return DirectionTransformer.toUndirected(g,
+    undirectedGraphFactory,
+    undirectedEdgeFactory,
+    false);
     }
 
     public UndirectedGraph<MycoNode,MycoEdge> toUndirected() {
-        return toUndirected(this);
+    return toUndirected(this);
     }*/
 
-    public static Forest<MycoNode,MycoEdge> getMinimumSpanningForest(Graph<MycoNode, MycoEdge> g) {
-        //log.finer("Trying to find MST for " + g);
-        MinimumSpanningForest<MycoNode,MycoEdge> msf =
-            new MinimumSpanningForest<MycoNode,MycoEdge>(g,
-                                                         typeForestFactory.create(),
-                                                         null);
-        return msf.getForest();
-    }
+  public static Forest<MycoNode,MycoEdge> getMinimumSpanningForest(Graph<MycoNode, MycoEdge> g) {
+    //log.finer("Trying to find MST for " + g);
+    MinimumSpanningForest<MycoNode,MycoEdge> msf =
+        new MinimumSpanningForest<MycoNode,MycoEdge>(g,
+                                                     typeForestFactory.create(),
+                                                     null);
+    return msf.getForest();
+  }
 
-    public Forest<MycoNode,MycoEdge> getMinimumSpanningForest() {
-        return getMinimumSpanningForest(this);
-    }
+  public Forest<MycoNode,MycoEdge> getMinimumSpanningForest() {
+    return getMinimumSpanningForest(this);
+  }
 
-    public Set<Set<MycoNode>> findConnectedComponents() {
-        Set<Set<MycoNode>> components = new HashSet<Set<MycoNode>>();
-        Set<MycoNode> unseen = new HashSet<MycoNode>(this.getVertices());
-        Queue<MycoNode> queue = new LinkedList<MycoNode>();
+  public Set<Set<MycoNode>> findConnectedComponents() {
+    Set<Set<MycoNode>> components = new HashSet<Set<MycoNode>>();
+    Set<MycoNode> unseen = new HashSet<MycoNode>(this.getVertices());
+    Queue<MycoNode> queue = new LinkedList<MycoNode>();
 
-        Set<MycoNode> workingComponent = null;
-        MycoNode current;
-        while ( (! unseen.isEmpty()) || (! queue.isEmpty()) ) {
-            if (queue.isEmpty()) {
-                // Queue an arbitary unvisited node
-                MycoNode n  = unseen.iterator().next();
-                queue.offer(n);
-                unseen.remove(n);
-                // Start new component
-                workingComponent = new HashSet<MycoNode>();
-                components.add(workingComponent);
-            }
-            current = queue.remove();
-            workingComponent.add(current);
-            for (MycoNode neighbor : current.getHyphaLink().getNeighbors()) {
-                if (unseen.contains(neighbor)) {
-                    queue.offer(neighbor);
-                    unseen.remove(neighbor);
-                }
-            }
+    Set<MycoNode> workingComponent = null;
+    MycoNode current;
+    while ( (! unseen.isEmpty()) || (! queue.isEmpty()) ) {
+      if (queue.isEmpty()) {
+        // Queue an arbitary unvisited node
+        MycoNode n  = unseen.iterator().next();
+        queue.offer(n);
+        unseen.remove(n);
+        // Start new component
+        workingComponent = new HashSet<MycoNode>();
+        components.add(workingComponent);
+      }
+      current = queue.remove();
+      workingComponent.add(current);
+      for (MycoNode neighbor : current.getHyphaLink().getNeighbors()) {
+        if (unseen.contains(neighbor)) {
+          queue.offer(neighbor);
+          unseen.remove(neighbor);
         }
-        return components;
+      }
     }
+    return components;
+  }
 }

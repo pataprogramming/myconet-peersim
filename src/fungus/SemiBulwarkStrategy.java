@@ -80,7 +80,7 @@ public class SemiBulwarkStrategy extends DynamicsStrategy {
     // case, nodes will mirror the AlertHormone concentration and
     // Bulwark/non-Bulwark state of the just-connected hypha
     if (hyphaNode != null) {
-        joinStrategy.doJoin(node, hyphaNode);
+      joinStrategy.doJoin(node, hyphaNode);
     }
 
     // Aim for targeted number of parents

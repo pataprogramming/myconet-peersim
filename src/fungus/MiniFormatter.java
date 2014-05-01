@@ -24,15 +24,15 @@ import java.lang.*;
 import java.util.logging.*;
 
 public class MiniFormatter extends Formatter {
-    public String format(LogRecord rec) {
-        StringBuffer buf = new StringBuffer(1000);
-        //buf.append(rec.getLevel());
-        buf.append(rec.getSourceClassName());
-        buf.append(" (");
-        buf.append(rec.getSourceMethodName());
-        buf.append("): ");
-        buf.append(formatMessage(rec));
-        buf.append("\n");
-        return buf.toString();
-    }
+  public String format(LogRecord rec) {
+    StringBuffer buf = new StringBuffer(1000);
+    //buf.append(rec.getLevel());
+    buf.append(rec.getSourceClassName());
+    buf.append(" (");
+    buf.append(rec.getSourceMethodName());
+    buf.append("): ");
+    buf.append(formatMessage(rec));
+    buf.append("\n");
+    return buf.toString();
+  }
 }

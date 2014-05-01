@@ -52,8 +52,7 @@ public class AdaptiveReverter implements CDProtocol, HyphaDataListener {
             Configuration.getClass(prefix + "." + PAR_ADAPTATION_STRATEGY);
         if (ReversionAdaptationStrategy.class.isAssignableFrom(adaptationClass))
         {
-          strategy =
-              (ReversionAdaptationStrategy) adaptationClass.newInstance();
+          strategy = (ReversionAdaptationStrategy) adaptationClass.newInstance();
         }
       } catch (Exception e) {
         throw new RuntimeException(e);

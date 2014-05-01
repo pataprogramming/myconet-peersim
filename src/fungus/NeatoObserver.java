@@ -29,88 +29,88 @@ import java.util.logging.*;
 import java.io.*;
 
 public class NeatoObserver implements Control {
-    private static final String PAR_HYPHADATA_PROTO =
-        "network.node.hyphadata_proto";
-    private static final String PAR_HYPHALINK_PROTO =
-        "network.node.hyphalink_proto";
-    private static final String PAR_MYCOCAST_PROTO =
-        "network.node.mycocast_proto";
-    private static final String PAR_BASENAME = "basename";
+  private static final String PAR_HYPHADATA_PROTO =
+      "network.node.hyphadata_proto";
+  private static final String PAR_HYPHALINK_PROTO =
+      "network.node.hyphalink_proto";
+  private static final String PAR_MYCOCAST_PROTO =
+      "network.node.mycocast_proto";
+  private static final String PAR_BASENAME = "basename";
 
-    private static Logger log = Logger.getLogger(NeatoObserver.class.getName());
+  private static Logger log = Logger.getLogger(NeatoObserver.class.getName());
 
-    private final String name;
-    private final int hyphadataPid;
-    private final int hyphalinkPid;
-    private final int mycocastPid;
-    private final String basename;
-    private final String dirname = "log";
+  private final String name;
+  private final int hyphadataPid;
+  private final int hyphalinkPid;
+  private final int mycocastPid;
+  private final String basename;
+  private final String dirname = "log";
 
-    public NeatoObserver(String name) {
-        this.name = name;
-        this.hyphadataPid = Configuration.getPid(PAR_HYPHADATA_PROTO);
-        this.hyphalinkPid = Configuration.getPid(PAR_HYPHALINK_PROTO);
-        this.mycocastPid = Configuration.getPid(PAR_MYCOCAST_PROTO);
-        this.basename = Configuration.getString(PAR_BASENAME);
+  public NeatoObserver(String name) {
+    this.name = name;
+    this.hyphadataPid = Configuration.getPid(PAR_HYPHADATA_PROTO);
+    this.hyphalinkPid = Configuration.getPid(PAR_HYPHALINK_PROTO);
+    this.mycocastPid = Configuration.getPid(PAR_MYCOCAST_PROTO);
+    this.basename = Configuration.getString(PAR_BASENAME);
 
-        boolean success = (new File(dirname)).mkdir();
-        if (success) {
-            System.out.println("Directory: " + dirname + " created");
-        }
+    boolean success = (new File(dirname)).mkdir();
+    if (success) {
+      System.out.println("Directory: " + dirname + " created");
     }
+  }
 
-    public boolean execute() {
-        MycoCast mycocast = (MycoCast) Network.get(0).getProtocol(mycocastPid);
+  public boolean execute() {
+    MycoCast mycocast = (MycoCast) Network.get(0).getProtocol(mycocastPid);
 
-        int bio = mycocast.countBiomass();
-        int ext = mycocast.countExtending();
-        int bra = mycocast.countBranching();
-        int imm = mycocast.countImmobile();
+    int bio = mycocast.countBiomass();
+    int ext = mycocast.countExtending();
+    int bra = mycocast.countBranching();
+    int imm = mycocast.countImmobile();
 
-        try {
+    try {
 
-            String filename = String.format("%s/%s-%03d.dot", dirname,
-                                            basename,
-                                            CommonState.getTime());
-            FileOutputStream fos = new FileOutputStream(filename);
-            PrintStream ps = new PrintStream(fos);
+      String filename = String.format("%s/%s-%03d.dot", dirname,
+                                      basename,
+                                      CommonState.getTime());
+      FileOutputStream fos = new FileOutputStream(filename);
+      PrintStream ps = new PrintStream(fos);
 
-            ps.println("graph G {");
+      ps.println("graph G {");
 
-            // Add vertices
-            for (int i = 0; i < Network.size(); i++) {
-                MycoNode n = (MycoNode) Network.get(i);
-                HyphaData data = (HyphaData) n.getProtocol(hyphadataPid);
-                HyphaLink link = (HyphaLink) n.getProtocol(hyphalinkPid);
-                if (data.isBiomass()) { continue; }
-                String nodeString = "  " + n.getID() + " [label = " +
-                    link.sameBiomassDegree() + ", fontcolor=black";
-                    //n.getID() + ", fontcolor=white"; //link.biomassDegree();
-                if (data.isExtending()) nodeString += ", shape = ellipse";
-                if (data.isBranching()) nodeString += ", shape = diamond";
-                if (data.isImmobile()) nodeString += ", shape = box";
-                nodeString += "];";
-                ps.println(nodeString);
-            }
+      // Add vertices
+      for (int i = 0; i < Network.size(); i++) {
+        MycoNode n = (MycoNode) Network.get(i);
+        HyphaData data = (HyphaData) n.getProtocol(hyphadataPid);
+        HyphaLink link = (HyphaLink) n.getProtocol(hyphalinkPid);
+        if (data.isBiomass()) { continue; }
+        String nodeString = "  " + n.getID() + " [label = " +
+            link.sameBiomassDegree() + ", fontcolor=black";
+        //n.getID() + ", fontcolor=white"; //link.biomassDegree();
+        if (data.isExtending()) nodeString += ", shape = ellipse";
+        if (data.isBranching()) nodeString += ", shape = diamond";
+        if (data.isImmobile()) nodeString += ", shape = box";
+        nodeString += "];";
+        ps.println(nodeString);
+      }
 
-            // Add edges
-            for (int i = 0; i < Network.size(); i++) {
-                MycoNode n = (MycoNode) Network.get(i);
-                HyphaLink link = (HyphaLink) n.getProtocol(hyphalinkPid);
-                HyphaData ndata = (HyphaData) n.getProtocol(hyphadataPid);
-                if (ndata.isBiomass()) { continue; }
+      // Add edges
+      for (int i = 0; i < Network.size(); i++) {
+        MycoNode n = (MycoNode) Network.get(i);
+        HyphaLink link = (HyphaLink) n.getProtocol(hyphalinkPid);
+        HyphaData ndata = (HyphaData) n.getProtocol(hyphadataPid);
+        if (ndata.isBiomass()) { continue; }
 
-                MycoList neighbors = link.getHyphae();
-                for (MycoNode o : neighbors) {
-                    HyphaData odata = (HyphaData) o.getProtocol(hyphadataPid);
-                    if (odata.isBiomass()) { continue; }
-                    ps.println("  " + n.getID() + " -- " + o.getID() + ";");
-                }
-            }
-            ps.println("}");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        MycoList neighbors = link.getHyphae();
+        for (MycoNode o : neighbors) {
+          HyphaData odata = (HyphaData) o.getProtocol(hyphadataPid);
+          if (odata.isBiomass()) { continue; }
+          ps.println("  " + n.getID() + " -- " + o.getID() + ";");
         }
-        return false;
+      }
+      ps.println("}");
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
+    return false;
+  }
 }

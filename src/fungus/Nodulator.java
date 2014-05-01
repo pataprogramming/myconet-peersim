@@ -220,11 +220,11 @@ public class Nodulator extends DynamicNetwork {
       //Network.remove(toReplace);
 
       //for (MycoNode node : myNode.getHyphaLink().getNeighbors()) {
-        //node.getHyphaLink().onKill();
-        // node.getFailureAlerter().neighborFailed(myNode,
-        //         myNode.getHyphaData().getState(),
-        //         myNode.getHyphaLink().degree());
-        // myNode.getHyphaLink().removeNeighbor(node);
+      //node.getHyphaLink().onKill();
+      // node.getFailureAlerter().neighborFailed(myNode,
+      //         myNode.getHyphaData().getState(),
+      //         myNode.getHyphaLink().degree());
+      // myNode.getHyphaLink().removeNeighbor(node);
       //}
 
       // Call onKill() for all protocols on the node to ensure proper operation

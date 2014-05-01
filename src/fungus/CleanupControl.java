@@ -46,7 +46,7 @@ public class CleanupControl implements Control {
 
   public static void addCleanupListener(CleanupListener l) {
     if (!listeners.contains(l)) {
-        listeners.add(l);
+      listeners.add(l);
     }
   }
 

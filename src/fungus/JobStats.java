@@ -24,60 +24,60 @@ import peersim.cdsim.CDState;
 
 public class JobStats {
 
-    public int type;
-    public int completedJobs = 0;
-    public int createdJobs = 0;
+  public int type;
+  public int completedJobs = 0;
+  public int createdJobs = 0;
 
-    public long totalWait = 0;
-    public long totalTransfers = 0;
-    public long totalRequeues = 0;
+  public long totalWait = 0;
+  public long totalTransfers = 0;
+  public long totalRequeues = 0;
 
-    private double consistentValue = Double.MAX_VALUE;
+  private double consistentValue = Double.MAX_VALUE;
 
-    public JobStats(int type) {
-        this.type = type;
+  public JobStats(int type) {
+    this.type = type;
+  }
+
+  public double getAvgResponse() {
+
+    if (CDState.getCycle() % JobGenerator.period == 0) {
+      consistentValue = ((double) totalWait) / ((double) completedJobs);
     }
 
-    public double getAvgResponse() {
+    return consistentValue;
+  }
 
-        if (CDState.getCycle() % JobGenerator.period == 0) {
-            consistentValue = ((double) totalWait) / ((double) completedJobs);
-        }
+  public double getAvgTransfers() {
+    return ((double) totalTransfers) / ((double) completedJobs);
+  }
 
-        return consistentValue;
-    }
+  public double getAvgRequeues() {
+    return ((double) totalRequeues) / ((double) completedJobs);
+  }
 
-    public double getAvgTransfers() {
-        return ((double) totalTransfers) / ((double) completedJobs);
-    }
+  public void complete(Job j) {
 
-    public double getAvgRequeues() {
-        return ((double) totalRequeues) / ((double) completedJobs);
-    }
+    completedJobs += 1;
+    totalWait += ((j.completionTime - j.creationTime) + 1);
+    totalTransfers += j.timesTransferred;
+    totalRequeues += j.timesRequeued;
+  }
 
-    public void complete(Job j) {
+  private void reset() {
+    completedJobs = 0;
+    totalWait = 0;
+    totalTransfers = 0;
+    createdJobs = 0;
+  }
 
-        completedJobs += 1;
-        totalWait += ((j.completionTime - j.creationTime) + 1);
-        totalTransfers += j.timesTransferred;
-        totalRequeues += j.timesRequeued;
-    }
+  public void incrementCreatedJobs(int jobCount) {
+    createdJobs += jobCount;
+  }
 
-    private void reset() {
-        completedJobs = 0;
-        totalWait = 0;
-        totalTransfers = 0;
-        createdJobs = 0;
-    }
-
-    public void incrementCreatedJobs(int jobCount) {
-        createdJobs += jobCount;
-    }
-
-    public String toString() {
-        return "[JobStats for type " + type + "]->(" + completedJobs
-            + " completed, " + getAvgResponse() + " mean response time, "
-            + getAvgTransfers() + " mean transfers)";
-    }
+  public String toString() {
+    return "[JobStats for type " + type + "]->(" + completedJobs
+        + " completed, " + getAvgResponse() + " mean response time, "
+        + getAvgTransfers() + " mean transfers)";
+  }
 
 }

@@ -30,62 +30,61 @@ import peersim.core.Control;
 import peersim.config.Configuration;
 
 public class LogObserver implements Control {
-    private static final String PAR_CONSOLE_LEVEL = "console_level";
-    private static final String PAR_LOG_LEVEL = "log_level";
+  private static final String PAR_CONSOLE_LEVEL = "console_level";
+  private static final String PAR_LOG_LEVEL = "log_level";
 
-    private static LogManager manager = LogManager.getLogManager();
-    private static Logger log = Logger.getLogger("fungus");
+  private static LogManager manager = LogManager.getLogManager();
+  private static Logger log = Logger.getLogger("fungus");
 
-    private final String name;
-    private final Level consoleLevel;
-    private final Level logLevel;
-    //private final int pid;
+  private final String name;
+  private final Level consoleLevel;
+  private final Level logLevel;
+  //private final int pid;
 
-    private static Set<String> classSet;
+  private static Set<String> classSet;
 
-    private static Filter classFilter = new Filter() {
-            public boolean isLoggable(LogRecord record) {
-                if (classSet.contains(record.getSourceClassName()))
-                        return true;
-                else
-                        return false;
-            }
-        };
+  private static Filter classFilter = new Filter() {
+      public boolean isLoggable(LogRecord record) {
+        if (classSet.contains(record.getSourceClassName()))
+            return true;
+        else
+            return false;
+      }
+    };
 
-    public LogObserver(String name) {
-        this.name = name;
+  public LogObserver(String name) {
+    this.name = name;
 
-        String ll = Configuration.getString(name + "." + PAR_LOG_LEVEL);
-        logLevel = Level.parse(ll);
-        String cl = Configuration.getString(name + "." + PAR_CONSOLE_LEVEL);
-        consoleLevel = Level.parse(cl);
+    String ll = Configuration.getString(name + "." + PAR_LOG_LEVEL);
+    logLevel = Level.parse(ll);
+    String cl = Configuration.getString(name + "." + PAR_CONSOLE_LEVEL);
+    consoleLevel = Level.parse(cl);
 
-        String [] names = Configuration.getNames(name + ".classes");
+    String [] names = Configuration.getNames(name + ".classes");
 
-        classSet = new HashSet<String>(names.length);
+    classSet = new HashSet<String>(names.length);
 
-        for (String n : names) {
-            classSet.add(Configuration.getClass(n).getName());
-        }
-
-        Formatter formatter = new MiniFormatter();
-        Handler console = new ConsoleHandler();
-        log.addHandler(console);
-        console.setFormatter(formatter);
-
-        console.setLevel(consoleLevel);
-        log.setLevel(logLevel);
-
-        if (classSet.size() > 0) {
-            log.info("Only logging events from: " + classSet);
-            console.setFilter(classFilter);
-        }
-        //this.name = name;
-        ///this.pid = Configuration.getPid(name + "." + PAR_PROTO);
+    for (String n : names) {
+      classSet.add(Configuration.getClass(n).getName());
     }
 
-    public boolean execute() {
-        return false;
+    Formatter formatter = new MiniFormatter();
+    Handler console = new ConsoleHandler();
+    log.addHandler(console);
+    console.setFormatter(formatter);
+
+    console.setLevel(consoleLevel);
+    log.setLevel(logLevel);
+
+    if (classSet.size() > 0) {
+      log.info("Only logging events from: " + classSet);
+      console.setFilter(classFilter);
     }
+    //this.name = name;
+    ///this.pid = Configuration.getPid(name + "." + PAR_PROTO);
+  }
+
+  public boolean execute() {
+    return false;
+  }
 }
-

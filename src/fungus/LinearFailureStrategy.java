@@ -23,35 +23,35 @@ package fungus;
 import peersim.config.*;
 
 public class LinearFailureStrategy implements FailureStrategy {
-    private static final String PREFIX = "config.linearfailure.";
-    private static final String PAR_SCALE = PREFIX + "scale";
-    private static final String PAR_BULWARK_SCALE = PREFIX + "bulwark_scale";
+  private static final String PREFIX = "config.linearfailure.";
+  private static final String PAR_SCALE = PREFIX + "scale";
+  private static final String PAR_BULWARK_SCALE = PREFIX + "bulwark_scale";
 
-    private double scale;
-    private double bulwarkScale;
+  private double scale;
+  private double bulwarkScale;
 
-    public LinearFailureStrategy() {
-        scale = Configuration.getDouble(PAR_SCALE);
-        bulwarkScale = Configuration.getDouble(PAR_BULWARK_SCALE);
-    }
+  public LinearFailureStrategy() {
+    scale = Configuration.getDouble(PAR_SCALE);
+    bulwarkScale = Configuration.getDouble(PAR_BULWARK_SCALE);
+  }
 
   public Double apply(MycoNode thisNode, HyphaType thisType,
                       int thisDegree, MycoNode failedNode,
                       HyphaType failedType, int failedDegree) {
-        if ((failedType == HyphaType.BIOMASS) ||
-            (failedType == HyphaType.BULWARK)) {
-            // For failed degree 1 neighbor (biomass), don't generate alert
-            // For failed bulwark neighbor, don't generate alert
+    if ((failedType == HyphaType.BIOMASS) ||
+        (failedType == HyphaType.BULWARK)) {
+      // For failed degree 1 neighbor (biomass), don't generate alert
+      // For failed bulwark neighbor, don't generate alert
 
-            return 0.0;
-        }
-        if (thisType != HyphaType.BULWARK) {
-            //if (n.getHyphaData().getState() == HyphaType.EXTENDING) {
-            //    return 1.0 * scale;
-            //}
-            return failedDegree * scale;
-        } else {
-            return failedDegree * bulwarkScale;
-        }
+      return 0.0;
     }
+    if (thisType != HyphaType.BULWARK) {
+      //if (n.getHyphaData().getState() == HyphaType.EXTENDING) {
+      //    return 1.0 * scale;
+      //}
+      return failedDegree * scale;
+    } else {
+      return failedDegree * bulwarkScale;
+    }
+  }
 }

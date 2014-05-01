@@ -44,7 +44,7 @@ public class SinglyTypedImmobileStrategy extends SinglyTypedHyphaStrategy {
     // Execute logic common to all hyphal states
     doCommonDynamics(node, data, link);
 
-        MycoList hyphae = link.getHyphae();
+    MycoList hyphae = link.getHyphae();
 
     // Randomly permute order so selections will be random
     java.util.Collections.shuffle(hyphae);

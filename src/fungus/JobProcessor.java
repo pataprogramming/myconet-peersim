@@ -30,40 +30,40 @@ import edu.uci.ics.jung.graph.*;
 import edu.uci.ics.jung.graph.util.*;
 
 public class JobProcessor implements CDProtocol {
-    private static final String PAR_HYPHADATA_PROTO = "hyphadata_proto";
+  private static final String PAR_HYPHADATA_PROTO = "hyphadata_proto";
 
-    private static int hyphaDataPid;
+  private static int hyphaDataPid;
 
-    private MycoNode myNode = null;
+  private MycoNode myNode = null;
 
-    private static Logger log = Logger.getLogger(JobProcessor.class.getName());
+  private static Logger log = Logger.getLogger(JobProcessor.class.getName());
 
-    public JobProcessor(String prefix) {
-        hyphaDataPid = Configuration.getPid(prefix + "." + PAR_HYPHADATA_PROTO);
+  public JobProcessor(String prefix) {
+    hyphaDataPid = Configuration.getPid(prefix + "." + PAR_HYPHADATA_PROTO);
+  }
+
+  public Object clone() {
+    JobProcessor ret = null;
+    try {
+      ret = (JobProcessor) super.clone();
+    } catch (CloneNotSupportedException e) {
+      // Never happens
     }
+    return ret;
+  }
 
-    public Object clone() {
-        JobProcessor ret = null;
-        try {
-            ret = (JobProcessor) super.clone();
-        } catch (CloneNotSupportedException e) {
-            // Never happens
-        }
-        return ret;
+  public void nextCycle(Node node, int pid)
+  {
+    HyphaData data = (HyphaData) node.getProtocol(hyphaDataPid);
+
+    myNode = (MycoNode) node;
+
+    if (!myNode.isUp()) {
+      return;
     }
-
-    public void nextCycle(Node node, int pid)
-    {
-        HyphaData data = (HyphaData) node.getProtocol(hyphaDataPid);
-
-        myNode = (MycoNode) node;
-
-        if (!myNode.isUp()) {
-            return;
-        }
-        log.log(Level.FINER, "Node "  + myNode.getID() + " ready to perform " +
-                data.getMaxCapacity() + " unit(s) of work", myNode);
-        data.doWork(data.getMaxCapacity());
-    }
+    log.log(Level.FINER, "Node "  + myNode.getID() + " ready to perform " +
+            data.getMaxCapacity() + " unit(s) of work", myNode);
+    data.doWork(data.getMaxCapacity());
+  }
 
 }

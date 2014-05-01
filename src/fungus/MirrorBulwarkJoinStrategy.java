@@ -39,13 +39,13 @@ public class MirrorBulwarkJoinStrategy extends JoinStrategy {
   }
 
   public void doJoin(MycoNode entering, MycoNode connected) {
-      HyphaData eData = entering.getHyphaData();
-      HyphaData cData = connected.getHyphaData();
+    HyphaData eData = entering.getHyphaData();
+    HyphaData cData = connected.getHyphaData();
 
-      ChemicalManager eManager =
-          ((ChemicalManager) entering.getProtocol(chemicalManagerPid));;
-      ChemicalManager cManager =
-          ((ChemicalManager) connected.getProtocol(chemicalManagerPid));
+    ChemicalManager eManager =
+        ((ChemicalManager) entering.getProtocol(chemicalManagerPid));;
+    ChemicalManager cManager =
+        ((ChemicalManager) connected.getProtocol(chemicalManagerPid));
 
     if (cData.getState() == HyphaType.BULWARK) {
       // If the node we connect to is in bulwark state, become bulwark

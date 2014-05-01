@@ -21,23 +21,23 @@
 package fungus;
 
 public class TypeStats {
-    public int type;
-    public int count = 0; // number of nodes of this type
-    public int capacity = 0; // total capacity of all nodes of this type
-    public int components = 0; //
+  public int type;
+  public int count = 0; // number of nodes of this type
+  public int capacity = 0; // total capacity of all nodes of this type
+  public int components = 0; //
 
-    public void reset() {
-        count = 0;
-        capacity = 0;
-        components = 0;
-    }
+  public void reset() {
+    count = 0;
+    capacity = 0;
+    components = 0;
+  }
 
-    public TypeStats(int type) {
-        this.type = type;
-    }
+  public TypeStats(int type) {
+    this.type = type;
+  }
 
-    public String toString() {
-        return "[Type " + type + "]->(" + count + " nodes, " + capacity
-            + " total capacity, " + components + " components)";
-    }
+  public String toString() {
+    return "[Type " + type + "]->(" + count + " nodes, " + capacity
+        + " total capacity, " + components + " components)";
+  }
 }

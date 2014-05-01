@@ -25,81 +25,81 @@ import java.util.logging.*;
 import peersim.cdsim.CDState;
 
 public class Job implements Comparable<Job> {
-    public static int idCounter = 0;
+  public static int idCounter = 0;
 
-    public int id;
-    public int type;
-    public int workUnits;
-    public int remaining;
-    public int creationTime;
+  public int id;
+  public int type;
+  public int workUnits;
+  public int remaining;
+  public int creationTime;
 
-    public int timesTransferred = 0;
-    public int timesRequeued = 0;
-    private boolean started = false;
-    private boolean completed = false;
-    public int completionTime = 0;
+  public int timesTransferred = 0;
+  public int timesRequeued = 0;
+  private boolean started = false;
+  private boolean completed = false;
+  public int completionTime = 0;
 
-    private static Logger log = Logger.getLogger(Job.class.getName());
+  private static Logger log = Logger.getLogger(Job.class.getName());
 
-    public Job(int type, int workUnits) {
-        id = idCounter++;
-        creationTime = CDState.getCycle();
+  public Job(int type, int workUnits) {
+    id = idCounter++;
+    creationTime = CDState.getCycle();
 
-        this.type = type;
-        this.workUnits = workUnits;
+    this.type = type;
+    this.workUnits = workUnits;
 
-        remaining = workUnits;
+    remaining = workUnits;
+  }
+
+  public void requeue(MycoNode n) {
+    timesRequeued++;
+    transfer(n);
+  }
+
+  public void transfer(MycoNode n) {
+    timesTransferred += 1;
+  }
+
+  public void complete() {
+    remaining = 0;
+    completed = true;
+    completionTime = CDState.getCycle();
+
+    log.finest(this + " completed at cycle " + completionTime
+               + " (created at cycle " + creationTime + ")");
+
+    JobController.complete(this);
+  }
+
+  // Takes number of available work units as an argument
+  // Returns number of work units remaining after processing
+  public int process(int work) {
+    started = true;
+    if (remaining > work) {
+      remaining -= work;
+      return 0;
+    } else {
+      int ret = work - remaining;
+      complete();
+      return ret;
     }
+  }
 
-    public void requeue(MycoNode n) {
-        timesRequeued++;
-        transfer(n);
-    }
+  public boolean isStarted() {
+    return started;
+  }
 
-    public void transfer(MycoNode n) {
-        timesTransferred += 1;
-    }
+  public boolean isCompleted() {
+    return completed;
+  }
 
-    public void complete() {
-        remaining = 0;
-        completed = true;
-        completionTime = CDState.getCycle();
+  public int compareTo(Job that) {
+    // return that.completionTime - this.completionTime;
+    return this.creationTime - that.creationTime;
+  }
 
-        log.finest(this + " completed at cycle " + completionTime
-                   + " (created at cycle " + creationTime + ")");
-
-        JobController.complete(this);
-    }
-
-    // Takes number of available work units as an argument
-    // Returns number of work units remaining after processing
-    public int process(int work) {
-        started = true;
-        if (remaining > work) {
-            remaining -= work;
-            return 0;
-        } else {
-            int ret = work - remaining;
-            complete();
-            return ret;
-        }
-    }
-
-    public boolean isStarted() {
-        return started;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public int compareTo(Job that) {
-        // return that.completionTime - this.completionTime;
-        return this.creationTime - that.creationTime;
-    }
-
-    public String toString() {
-        return "<Job#" + id + "(" + type + "):" + (workUnits - remaining) + "/"
-            + workUnits + " units>";
-    }
+  public String toString() {
+    return "<Job#" + id + "(" + type + "):" + (workUnits - remaining) + "/"
+        + workUnits + " units>";
+  }
 }

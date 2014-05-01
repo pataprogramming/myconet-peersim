@@ -23,26 +23,26 @@ package fungus;
 import peersim.config.*;
 
 public class QuadraticFailureStrategy implements FailureStrategy {
-    private static final String PREFIX = "config.quadraticfailure.";
-    private static final String PAR_SQ = PREFIX + "sq";
-    private static final String PAR_LI = PREFIX + "li";
-    private static final String PAR_CO = PREFIX + "co";
+  private static final String PREFIX = "config.quadraticfailure.";
+  private static final String PAR_SQ = PREFIX + "sq";
+  private static final String PAR_LI = PREFIX + "li";
+  private static final String PAR_CO = PREFIX + "co";
 
-    private double sq;
-    private double li;
-    private double co;
+  private double sq;
+  private double li;
+  private double co;
 
-    public QuadraticFailureStrategy() {
-        sq = Configuration.getDouble(PAR_SQ);
-        li = Configuration.getDouble(PAR_LI);
-        co = Configuration.getDouble(PAR_CO);
-    }
+  public QuadraticFailureStrategy() {
+    sq = Configuration.getDouble(PAR_SQ);
+    li = Configuration.getDouble(PAR_LI);
+    co = Configuration.getDouble(PAR_CO);
+  }
 
   public Double apply(MycoNode thisNode, HyphaType thisType,
                       int thisDegree, MycoNode failedNode,
                       HyphaType failedType, int failedDegree) {
-        double ret = (sq * failedDegree * failedDegree) +
-            (li * failedDegree) + co;
-        return (ret >= 0.0 ? ret : 0.0);
-    }
+    double ret = (sq * failedDegree * failedDegree) +
+        (li * failedDegree) + co;
+    return (ret >= 0.0 ? ret : 0.0);
+  }
 }

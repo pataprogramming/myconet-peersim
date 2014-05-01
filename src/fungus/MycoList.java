@@ -28,158 +28,158 @@ import peersim.core.*;
 
 public class MycoList extends ArrayList<MycoNode> {
 
-    protected static Random generator;
+  protected static Random generator;
 
-    public MycoList() {
-        super();
+  public MycoList() {
+    super();
+  }
+  public MycoList(int initialCapacity) {
+    super(initialCapacity);
+  }
+  public MycoList(Iterable<MycoNode> nodes) {
+    super();
+    for (MycoNode n : nodes) {
+      this.add(n);
     }
-    public MycoList(int initialCapacity) {
-        super(initialCapacity);
+  }
+
+  public MycoNode getRandom() {
+    if (this.size() == 0) {
+      return null;
     }
-    public MycoList(Iterable<MycoNode> nodes) {
-        super();
-        for (MycoNode n : nodes) {
-            this.add(n);
-        }
+    return get(CommonState.r.nextInt(this.size()));
+  }
+
+  public MycoNode getRandomOfType(int t) {
+    MycoList ts = getType(t);
+    if (ts.isEmpty()) {
+      return null;
     }
+    return ts.get(CommonState.r.nextInt(ts.size()));
+  }
 
-    public MycoNode getRandom() {
-        if (this.size() == 0) {
-            return null;
-        }
-        return get(CommonState.r.nextInt(this.size()));
+  public MycoList duplicate() {
+    return new MycoList(this);
+  }
+
+  public List<MycoList> partition() {
+    List<MycoList> ret = new ArrayList<MycoList>();
+    for (int t = 0; t < HyphaData.numTypes; t++) {
+      ret.add(new MycoList());
     }
-
-    public MycoNode getRandomOfType(int t) {
-        MycoList ts = getType(t);
-        if (ts.isEmpty()) {
-            return null;
-        }
-        return ts.get(CommonState.r.nextInt(ts.size()));
+    for (MycoNode n : this) {
+      ret.get(n.getHyphaData().getType()).add(n);
     }
+    return ret;
+  }
 
-    public MycoList duplicate() {
-        return new MycoList(this);
+  private static List<Predicate<MycoNode>> typePredicates = new ArrayList<Predicate<MycoNode>>();
+  private static List<Predicate<MycoNode>> typeNotPredicates = new ArrayList<Predicate<MycoNode>>();
+
+  public static Predicate<MycoNode> getTypePredicate(final int t) {
+    while (typePredicates.size() <= t) {
+      typePredicates.add(new Predicate<MycoNode>() {
+          private int type = typePredicates.size();
+          public boolean apply(MycoNode n) {
+            return n.getHyphaData().getType() == type;
+          }
+        });
     }
+    return typePredicates.get(t);
+  }
 
-    public List<MycoList> partition() {
-        List<MycoList> ret = new ArrayList<MycoList>();
-        for (int t = 0; t < HyphaData.numTypes; t++) {
-            ret.add(new MycoList());
-        }
-        for (MycoNode n : this) {
-            ret.get(n.getHyphaData().getType()).add(n);
-        }
-        return ret;
+  public static Predicate<MycoNode> getTypeNotPredicate(final int t) {
+    while (typeNotPredicates.size() <= t) {
+      typeNotPredicates.add(new Predicate<MycoNode>() {
+          private int type = typeNotPredicates.size();
+          public boolean apply(MycoNode n) {
+            return n.getHyphaData().getType() != type;
+          }
+        });
     }
-
-    private static List<Predicate<MycoNode>> typePredicates = new ArrayList<Predicate<MycoNode>>();
-    private static List<Predicate<MycoNode>> typeNotPredicates = new ArrayList<Predicate<MycoNode>>();
-
-    public static Predicate<MycoNode> getTypePredicate(final int t) {
-        while (typePredicates.size() <= t) {
-            typePredicates.add(new Predicate<MycoNode>() {
-                    private int type = typePredicates.size();
-                    public boolean apply(MycoNode n) {
-                        return n.getHyphaData().getType() == type;
-                    }
-                });
-        }
-        return typePredicates.get(t);
-    }
-
-    public static Predicate<MycoNode> getTypeNotPredicate(final int t) {
-        while (typeNotPredicates.size() <= t) {
-            typeNotPredicates.add(new Predicate<MycoNode>() {
-                    private int type = typeNotPredicates.size();
-                    public boolean apply(MycoNode n) {
-                        return n.getHyphaData().getType() != type;
-                    }
-                });
-        }
-        return typeNotPredicates.get(t);
-    }
+    return typeNotPredicates.get(t);
+  }
 
 
-    public static Predicate<MycoNode> hyphaPredicate = new Predicate<MycoNode>() {
-        public boolean apply(MycoNode n) {
-            return n.getHyphaData().isHypha();
-        }
+  public static Predicate<MycoNode> hyphaPredicate = new Predicate<MycoNode>() {
+      public boolean apply(MycoNode n) {
+        return n.getHyphaData().isHypha();
+      }
     };
-    public static Predicate<MycoNode> biomassPredicate = new Predicate<MycoNode>() {
-        public boolean apply(MycoNode n) {
-            return n.getHyphaData().isBiomass();
-        }
+  public static Predicate<MycoNode> biomassPredicate = new Predicate<MycoNode>() {
+      public boolean apply(MycoNode n) {
+        return n.getHyphaData().isBiomass();
+      }
     };
-    public static Predicate<MycoNode> branchingPredicate = new Predicate<MycoNode>() {
-        public boolean apply(MycoNode n) {
-            return n.getHyphaData().isBranching();
-        }
+  public static Predicate<MycoNode> branchingPredicate = new Predicate<MycoNode>() {
+      public boolean apply(MycoNode n) {
+        return n.getHyphaData().isBranching();
+      }
     };
-    public static Predicate<MycoNode> bulwarkPredicate =
-        new Predicate<MycoNode>() {
+  public static Predicate<MycoNode> bulwarkPredicate =
+      new Predicate<MycoNode>() {
         public boolean apply(MycoNode n) {
-            return n.getHyphaData().isBulwark();
+          return n.getHyphaData().isBulwark();
         }
-    };
-    public static Predicate<MycoNode> extendingPredicate =
-        new Predicate<MycoNode>() {
+      };
+  public static Predicate<MycoNode> extendingPredicate =
+      new Predicate<MycoNode>() {
         public boolean apply(MycoNode n) {
-            return n.getHyphaData().isExtending();
+          return n.getHyphaData().isExtending();
         }
+      };
+  public static Predicate<MycoNode> immobilePredicate = new Predicate<MycoNode>() {
+      public boolean apply(MycoNode n) {
+        return n.getHyphaData().isImmobile();
+      }
     };
-    public static Predicate<MycoNode> immobilePredicate = new Predicate<MycoNode>() {
-        public boolean apply(MycoNode n) {
-            return n.getHyphaData().isImmobile();
-        }
+  public static Predicate<MycoNode> stablePredicate = new Predicate<MycoNode>() {
+      public boolean apply(MycoNode n) {
+        return immobilePredicate.apply(n) || branchingPredicate.apply(n);
+      }
     };
-    public static Predicate<MycoNode> stablePredicate = new Predicate<MycoNode>() {
-        public boolean apply(MycoNode n) {
-            return immobilePredicate.apply(n) || branchingPredicate.apply(n);
-        }
-    };
-    public static Predicate<MycoNode> deadPredicate = new Predicate<MycoNode>() {
-        public boolean apply(MycoNode n) {
-            return n.getHyphaData().isDead();
-        }
+  public static Predicate<MycoNode> deadPredicate = new Predicate<MycoNode>() {
+      public boolean apply(MycoNode n) {
+        return n.getHyphaData().isDead();
+      }
     };
 
-    public MycoList getBiomass() {
-        return new MycoList(Iterables.filter(this, biomassPredicate));
-    }
+  public MycoList getBiomass() {
+    return new MycoList(Iterables.filter(this, biomassPredicate));
+  }
 
-    public MycoList getHyphae() {
-        return new MycoList(Iterables.filter(this, hyphaPredicate));
-    }
-    public MycoList getBulwark() {
-        return new MycoList(Iterables.filter(this, bulwarkPredicate));
-    }
-    public MycoList getBranching() {
-        return new MycoList(Iterables.filter(this, branchingPredicate));
-    }
+  public MycoList getHyphae() {
+    return new MycoList(Iterables.filter(this, hyphaPredicate));
+  }
+  public MycoList getBulwark() {
+    return new MycoList(Iterables.filter(this, bulwarkPredicate));
+  }
+  public MycoList getBranching() {
+    return new MycoList(Iterables.filter(this, branchingPredicate));
+  }
 
-    public MycoList getExtending() {
-        return new MycoList(Iterables.filter(this, extendingPredicate));
-    }
+  public MycoList getExtending() {
+    return new MycoList(Iterables.filter(this, extendingPredicate));
+  }
 
-    public MycoList getImmobile() {
-        return new MycoList(Iterables.filter(this, immobilePredicate));
-    }
+  public MycoList getImmobile() {
+    return new MycoList(Iterables.filter(this, immobilePredicate));
+  }
 
-    public MycoList getStable() {
-        return new MycoList(Iterables.filter(this, stablePredicate));
-    }
+  public MycoList getStable() {
+    return new MycoList(Iterables.filter(this, stablePredicate));
+  }
 
-    public MycoList getDead() {
-        return new MycoList(Iterables.filter(this, deadPredicate));
-    }
+  public MycoList getDead() {
+    return new MycoList(Iterables.filter(this, deadPredicate));
+  }
 
-    public MycoList getType(int t) {
-        return new MycoList(Iterables.filter(this, getTypePredicate(t)));
-    }
+  public MycoList getType(int t) {
+    return new MycoList(Iterables.filter(this, getTypePredicate(t)));
+  }
 
-    public MycoList getTypeNot(int t) {
-        return new MycoList(Iterables.filter(this, getTypeNotPredicate(t)));
-    }
+  public MycoList getTypeNot(int t) {
+    return new MycoList(Iterables.filter(this, getTypeNotPredicate(t)));
+  }
 
 }

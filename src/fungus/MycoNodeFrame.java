@@ -45,196 +45,210 @@ import org.apache.commons.collections15.*;
 import org.apache.commons.collections15.functors.*;
 
 public class MycoNodeFrame extends JFrame implements ChangeListener {
-    public MycoNode node;
+  public MycoNode node;
 
-    private JLabel stateLabel;
-    private JLabel maxCapacityLabel;
-    private JLabel typeLabel;
-    private JLabel queueLengthLabel;
-    private JLabel sameLabel;
-    private JLabel differentLabel;
-    private JLabel idealImmobileLabel;
-    private JLabel idealHyphaeLabel;
-    private JLabel idealBiomassLabel;
-    private JLabel degreeLabel;
-    private JLabel hyphaDegreeLabel;
-    private JLabel biomassDegreeLabel;
-    private JLabel capacityUtilizationLabel;
-    private JLabel hyphaUtilizationLabel;
-    private JLabel biomassUtilizationLabel;
-    private JScrollPane neighborListScroller;
-    private JList neighborListControl;
-    private JTextArea loggingTextArea;
+  private JLabel stateLabel;
+  private JLabel maxCapacityLabel;
+  private JLabel typeLabel;
+  private JLabel queueLengthLabel;
+  private JLabel sameLabel;
+  private JLabel differentLabel;
+  private JLabel idealImmobileLabel;
+  private JLabel idealHyphaeLabel;
+  private JLabel idealBiomassLabel;
+  private JLabel degreeLabel;
+  private JLabel hyphaDegreeLabel;
+  private JLabel biomassDegreeLabel;
+  private JLabel capacityUtilizationLabel;
+  private JLabel hyphaUtilizationLabel;
+  private JLabel biomassUtilizationLabel;
+  private JScrollPane neighborListScroller;
+  private JList neighborListControl;
+  private JTextArea loggingTextArea;
 
-    private HyphaData data;
-    private HyphaLink link;
-    private MycoCast mycocast;
+  private HyphaData data;
+  private HyphaLink link;
+  private MycoCast mycocast;
 
-    private MycoNodeLogHandler handler;
+  private MycoNodeLogHandler handler;
 
-    private Graph<MycoNode,MycoEdge> graph;
+  private Graph<MycoNode,MycoEdge> graph;
 
-    public MycoNodeFrame(MycoNode node) {
-        this.node = node;
-        this.setTitle("Node " + node.getID());
+  public MycoNodeFrame(MycoNode node) {
+    this.node = node;
+    this.setTitle("Node " + node.getID());
 
-        graph = JungGraphObserver.getGraph();
+    graph = JungGraphObserver.getGraph();
 
-        Container contentPane = getContentPane();
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
-        JPanel labelPane = new JPanel();
-        labelPane.setLayout(new GridLayout(7,2));
-        JPanel neighborPane = new JPanel();
-        neighborPane.setLayout(new BoxLayout(neighborPane,BoxLayout.PAGE_AXIS));
-        JPanel logPane = new JPanel();
-        logPane.setLayout(new BoxLayout(logPane,BoxLayout.PAGE_AXIS));
-        JPanel buttonPane = new JPanel();
-        buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
+    Container contentPane = getContentPane();
+    contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
+    JPanel labelPane = new JPanel();
+    labelPane.setLayout(new GridLayout(7,2));
+    JPanel neighborPane = new JPanel();
+    neighborPane.setLayout(new BoxLayout(neighborPane,BoxLayout.PAGE_AXIS));
+    JPanel logPane = new JPanel();
+    logPane.setLayout(new BoxLayout(logPane,BoxLayout.PAGE_AXIS));
+    JPanel buttonPane = new JPanel();
+    buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
 
-        loggingTextArea = new JTextArea("",25,100);
-        loggingTextArea.setLineWrap(true);
-        loggingTextArea.setEditable(false);
-        handler = new MycoNodeLogHandler(node, loggingTextArea);
-        handler.addChangeListener(this);
-        JScrollPane logScrollPane = new JScrollPane(loggingTextArea);
-        logScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        logPane.add(logScrollPane);
+    loggingTextArea = new JTextArea("",25,100);
+    loggingTextArea.setLineWrap(true);
+    loggingTextArea.setEditable(false);
+    handler = new MycoNodeLogHandler(node, loggingTextArea);
+    handler.addChangeListener(this);
+    JScrollPane logScrollPane = new JScrollPane(loggingTextArea);
+    logScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    logPane.add(logScrollPane);
 
-        contentPane.add(labelPane);
-        //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
-        contentPane.add(neighborPane);
-        //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
-        contentPane.add(logPane);
-        contentPane.add(buttonPane);
+    contentPane.add(labelPane);
+    //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
+    contentPane.add(neighborPane);
+    //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
+    contentPane.add(logPane);
+    contentPane.add(buttonPane);
 
-        data = node.getHyphaData();
-        link = node.getHyphaLink();
-        mycocast = node.getMycoCast();
+    data = node.getHyphaData();
+    link = node.getHyphaLink();
+    mycocast = node.getMycoCast();
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        stateLabel = new JLabel();
-        typeLabel = new JLabel();
-        queueLengthLabel = new JLabel();
-        sameLabel = new JLabel();
-        differentLabel = new JLabel();
-        maxCapacityLabel = new JLabel();
-        idealImmobileLabel = new JLabel();
-        idealHyphaeLabel = new JLabel();
-        idealBiomassLabel = new JLabel();
-        degreeLabel = new JLabel();
-        hyphaDegreeLabel = new JLabel();
-        biomassDegreeLabel = new JLabel();
-        hyphaUtilizationLabel = new JLabel();
-        biomassUtilizationLabel = new JLabel();
-        capacityUtilizationLabel = new JLabel();
+    stateLabel = new JLabel();
+    typeLabel = new JLabel();
+    queueLengthLabel = new JLabel();
+    sameLabel = new JLabel();
+    differentLabel = new JLabel();
+    maxCapacityLabel = new JLabel();
+    idealImmobileLabel = new JLabel();
+    idealHyphaeLabel = new JLabel();
+    idealBiomassLabel = new JLabel();
+    degreeLabel = new JLabel();
+    hyphaDegreeLabel = new JLabel();
+    biomassDegreeLabel = new JLabel();
+    hyphaUtilizationLabel = new JLabel();
+    biomassUtilizationLabel = new JLabel();
+    capacityUtilizationLabel = new JLabel();
 
-        labelPane.add(new JLabel("state"));
-        labelPane.add(stateLabel);
-        labelPane.add(new JLabel("type"));
-        labelPane.add(typeLabel);
-        labelPane.add(new JLabel("queue"));
-        labelPane.add(queueLengthLabel);
-        labelPane.add(new JLabel(""));
-        labelPane.add(new JLabel(""));
-        labelPane.add(new JLabel("same"));
-        labelPane.add(sameLabel);
-        labelPane.add(new JLabel("different"));
-        labelPane.add(differentLabel);
-        //labelPane.add(new JLabel("immobile"));
-        //labelPane.add(idealImmobileLabel);
-        labelPane.add(new JLabel(""));
-        labelPane.add(new JLabel("actual"));
-        labelPane.add(new JLabel("ideal"));
-        labelPane.add(new JLabel("utilization"));
-        labelPane.add(new JLabel("hyphae"));
-        labelPane.add(hyphaDegreeLabel);
-        labelPane.add(idealHyphaeLabel);
-        labelPane.add(hyphaUtilizationLabel);
-        labelPane.add(new JLabel("biomass"));
-        labelPane.add(biomassDegreeLabel);
-        labelPane.add(idealBiomassLabel);
-        labelPane.add(biomassUtilizationLabel);
-        labelPane.add(new JLabel("capacity"));
-        labelPane.add(degreeLabel);
-        labelPane.add(maxCapacityLabel);
-        labelPane.add(capacityUtilizationLabel);
+    labelPane.add(new JLabel("state"));
+    labelPane.add(stateLabel);
+    labelPane.add(new JLabel("type"));
+    labelPane.add(typeLabel);
+    labelPane.add(new JLabel("queue"));
+    labelPane.add(queueLengthLabel);
+    labelPane.add(new JLabel(""));
+    labelPane.add(new JLabel(""));
+    labelPane.add(new JLabel("same"));
+    labelPane.add(sameLabel);
+    labelPane.add(new JLabel("different"));
+    labelPane.add(differentLabel);
+    //labelPane.add(new JLabel("immobile"));
+    //labelPane.add(idealImmobileLabel);
+    labelPane.add(new JLabel(""));
+    labelPane.add(new JLabel("actual"));
+    labelPane.add(new JLabel("ideal"));
+    labelPane.add(new JLabel("utilization"));
+    labelPane.add(new JLabel("hyphae"));
+    labelPane.add(hyphaDegreeLabel);
+    labelPane.add(idealHyphaeLabel);
+    labelPane.add(hyphaUtilizationLabel);
+    labelPane.add(new JLabel("biomass"));
+    labelPane.add(biomassDegreeLabel);
+    labelPane.add(idealBiomassLabel);
+    labelPane.add(biomassUtilizationLabel);
+    labelPane.add(new JLabel("capacity"));
+    labelPane.add(degreeLabel);
+    labelPane.add(maxCapacityLabel);
+    labelPane.add(capacityUtilizationLabel);
 
-        neighborListControl = new JList();
-        neighborListControl.setLayoutOrientation(JList.VERTICAL_WRAP);
-        neighborListControl.setVisibleRowCount(-1);
+    neighborListControl = new JList();
+    neighborListControl.setLayoutOrientation(JList.VERTICAL_WRAP);
+    neighborListControl.setVisibleRowCount(-1);
 
-        neighborListScroller = new JScrollPane(neighborListControl);
-        neighborListScroller.setPreferredSize(new Dimension(250, 150));
-        neighborListScroller.setMinimumSize(new Dimension(250, 150));
+    neighborListScroller = new JScrollPane(neighborListControl);
+    neighborListScroller.setPreferredSize(new Dimension(250, 150));
+    neighborListScroller.setMinimumSize(new Dimension(250, 150));
 
-        neighborPane.add(neighborListScroller);
+    neighborPane.add(neighborListScroller);
 
-        JButton updateButton = new JButton("Refresh");
-        ActionListener updater = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    refreshData();
-                }
-            };
-        updateButton.addActionListener(updater);
-
-        JButton closeButton = new JButton("Close");
-        ActionListener closer = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    closeFrame();
-                }
-            };
-        closeButton.addActionListener(closer);
-
-        buttonPane.add(Box.createHorizontalGlue());
-        buttonPane.add(updateButton);
-        buttonPane.add(Box.createRigidArea(new Dimension(5,0)));
-        buttonPane.add(closeButton);
-
-        refreshData();
-
-        JungGraphObserver.addChangeListener(this);
-
-        this.pack();
-        this.setVisible(true);
-    }
-
-    public void closeFrame() {
-        JungGraphObserver.removeChangeListener(this);
-        dispose();
-    }
-
-    public void stateChanged(ChangeEvent e) {
-        if (e.getSource() == handler) {
-            getContentPane().validate();
-        } else {
-            refreshData();
+    JButton updateButton = new JButton("Refresh");
+    ActionListener updater = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          refreshData();
         }
+      };
+    updateButton.addActionListener(updater);
+
+    JButton closeButton = new JButton("Close");
+    ActionListener closer = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          closeFrame();
+        }
+      };
+    closeButton.addActionListener(closer);
+
+    buttonPane.add(Box.createHorizontalGlue());
+    buttonPane.add(updateButton);
+    buttonPane.add(Box.createRigidArea(new Dimension(5,0)));
+    buttonPane.add(closeButton);
+
+    refreshData();
+
+    JungGraphObserver.addChangeListener(this);
+
+    this.pack();
+    this.setVisible(true);
+  }
+
+  public void closeFrame() {
+    JungGraphObserver.removeChangeListener(this);
+    dispose();
+  }
+
+  public void stateChanged(ChangeEvent e) {
+    if (e.getSource() == handler) {
+      getContentPane().validate();
+    } else {
+      refreshData();
     }
+  }
 
-    public void refreshData() {
-        stateLabel.setText(data.getState().toString());
-        typeLabel.setText(new Integer(data.getType()).toString());
-        queueLengthLabel.setText(new Integer(data.getQueueLength()).toString());
-        maxCapacityLabel.setText(Integer.toString(data.getMaxCapacity()));
-        sameLabel.setText(Integer.toString(link.getSameNeighbors().size()));
-        differentLabel.setText(Integer.toString(link.getDifferentNeighbors().size()));
-//        idealImmobileLabel.setText(Integer.toString(data.getIdealImmobile()));
-        idealHyphaeLabel.setText(Integer.toString(data.getIdealHyphae()));
-        idealBiomassLabel.setText(Integer.toString(data.getIdealBiomass()));
-        degreeLabel.setText(Integer.toString(link.degree()));
-        hyphaDegreeLabel.setText(Integer.toString(link.sameHyphaDegree()));
-        biomassDegreeLabel.setText(Integer.toString(link.sameBiomassDegree()));
+  public void refreshData() {
+    stateLabel.setText(data.getState().toString());
+    typeLabel.setText(new Integer(data.getType()).toString());
+    queueLengthLabel.setText(new Integer(data.getQueueLength()).toString());
+    maxCapacityLabel.setText(Integer.toString(data.getMaxCapacity()));
+    sameLabel.setText(Integer.toString(link.getSameNeighbors().size()));
 
-        capacityUtilizationLabel.setText(Double.toString((new Integer(link.degree())).doubleValue() / (new Integer(data.getMaxCapacity())).doubleValue()));
-        hyphaUtilizationLabel.setText(Double.toString((new Integer(link.sameHyphaDegree())).doubleValue() / (new Integer(data.getIdealHyphae())).doubleValue()));
-        biomassUtilizationLabel.setText(Double.toString((new Integer(link.sameBiomassDegree())).doubleValue() / (new Integer(data.getIdealBiomass())).doubleValue()));
+    int different = link.getDifferentNeighbors().size();
+    differentLabel.setText(Integer.toString(different));
 
-        Object[] array = link.getNeighbors().toArray();
-        Arrays.sort(array);
+    // idealImmobileLabel.setText(Integer.toString(data.getIdealImmobile()));
+    idealHyphaeLabel.setText(Integer.toString(data.getIdealHyphae()));
+    idealBiomassLabel.setText(Integer.toString(data.getIdealBiomass()));
+    degreeLabel.setText(Integer.toString(link.degree()));
+    hyphaDegreeLabel.setText(Integer.toString(link.sameHyphaDegree()));
+    biomassDegreeLabel.setText(Integer.toString(link.sameBiomassDegree()));
 
-        neighborListControl.setListData(array);
-        validate();
-    }
+    double capacityUtilization =
+        (new Integer(link.degree())).doubleValue() /
+        (new Integer(data.getMaxCapacity())).doubleValue();
+    capacityUtilizationLabel.setText(Double.toString(capacityUtilization));
+
+    double hyphaUtilization =
+        (new Integer(link.sameHyphaDegree())).doubleValue() /
+        (new Integer(data.getIdealHyphae())).doubleValue();
+    hyphaUtilizationLabel.setText(Double.toString(hyphaUtilization));
+
+    double biomassUtilization =
+        (new Integer(link.sameBiomassDegree())).doubleValue() /
+        (new Integer(data.getIdealBiomass())).doubleValue();
+    biomassUtilizationLabel.setText(Double.toString(biomassUtilization));
+
+    Object[] array = link.getNeighbors().toArray();
+    Arrays.sort(array);
+
+    neighborListControl.setListData(array);
+    validate();
+  }
 
 }

@@ -20,10 +20,12 @@
 
 package fungus;
 
+import peersim.core.Node;
+import peersim.core.GeneralNode;
 import peersim.config.Configuration;
 
-public class MycoNode extends peersim.core.GeneralNode implements
-                                                         peersim.core.Node, Comparable {
+public class MycoNode extends GeneralNode implements Node, Comparable {
+
   private static final String PAR_MYCOCAST_PROTO = "mycocast_proto";
   private static final String PAR_HYPHADATA_PROTO = "hyphadata_proto";
   private static final String PAR_HYPHALINK_PROTO = "hyphalink_proto";
@@ -123,8 +125,9 @@ public class MycoNode extends peersim.core.GeneralNode implements
 
   public String toString() {
     return new String(getID() + " (type-" + getHyphaData().getType() + "; "
-                      + getHyphaData().getState() + "; " + getHyphaLink().degree()
-                      + "/" + getHyphaData().getMaxCapacity() + ")");
+                      + getHyphaData().getState() + "; "
+                      + getHyphaLink().degree() + "/"
+                      + getHyphaData().getMaxCapacity() + ")");
   }
 
   public int compareTo(Object o) {

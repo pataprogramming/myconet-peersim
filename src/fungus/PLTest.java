@@ -29,41 +29,41 @@ import cern.jet.random.engine.*;
 import cern.jet.random.Distributions.*;
 
 public class PLTest {
-    //private static final String PAR_CONSOLE_LEVEL = "console_level";
-    // private static final String PAR_LOG_LEVEL = "log_level";
+  //private static final String PAR_CONSOLE_LEVEL = "console_level";
+  // private static final String PAR_LOG_LEVEL = "log_level";
 
-    //private final Level console_level;
-    //private final Level log_level;
-    //private final int pid;
+  //private final Level console_level;
+  //private final Level log_level;
+  //private final int pid;
 
-    private static cern.jet.random.engine.RandomEngine generator;
+  private static cern.jet.random.engine.RandomEngine generator;
 
-    //public PowerLawInitializer(String name) {
-    //   this.name = name;
-    //   # FIXME: Use peersim random generator?
-    //   this.generator =
-    //       new cern.jet.random.engine.MersenneTwister(new java.util.Date());
-    //}
+  //public PowerLawInitializer(String name) {
+  //   this.name = name;
+  //   # FIXME: Use peersim random generator?
+  //   this.generator =
+  //       new cern.jet.random.engine.MersenneTwister(new java.util.Date());
+  //}
 
-    //public boolean execute() {
-    //  MycoNode n;
-    //  for (int i = 1; i < Network.size(); i++) {
-    //      n = Network.get(i);
-    //      HyphaData d = n.getHyphaData();
-    //      d.setMax(Distributions.nextPowLaw()
-    //  }
-    //  return false;
-    //}
+  //public boolean execute() {
+  //  MycoNode n;
+  //  for (int i = 1; i < Network.size(); i++) {
+  //      n = Network.get(i);
+  //      HyphaData d = n.getHyphaData();
+  //      d.setMax(Distributions.nextPowLaw()
+  //  }
+  //  return false;
+  //}
 
-    public static void main(String argv[]) {
-        generator = new cern.jet.random.engine.MersenneTwister(new java.util.Date());
-        double alpha = 1.5;
-        double top = 500.0;
-        double cut = top;
-        for (int i=10000; --i >=0; ) {
-            //int pl = (new Double(cern.jet.random.Distributions.nextPowLaw(alpha, cut, generator) * top)).intValue();
-            int pl = (new Double(cern.jet.random.Distributions.nextPowLaw(alpha, cut, generator))).intValue();
-            System.out.println(500- pl);
-        }
+  public static void main(String argv[]) {
+    generator = new cern.jet.random.engine.MersenneTwister(new java.util.Date());
+    double alpha = 1.5;
+    double top = 500.0;
+    double cut = top;
+    for (int i=10000; --i >=0; ) {
+      //int pl = (new Double(cern.jet.random.Distributions.nextPowLaw(alpha, cut, generator) * top)).intValue();
+      int pl = (new Double(cern.jet.random.Distributions.nextPowLaw(alpha, cut, generator))).intValue();
+      System.out.println(500- pl);
     }
+  }
 }

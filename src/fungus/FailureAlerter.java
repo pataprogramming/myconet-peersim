@@ -167,7 +167,7 @@ public class FailureAlerter implements CDProtocol, FailureAnnouncementListener,
               ", generating " + amount + " of AlertHormone",
               new Object[] { myNode, n });
       ((ChemicalManager) myNode.getProtocol(chemicalManagerPid))
-          .add(new AlertHormone(amount));
+      .add(new AlertHormone(amount));
     }
 
     // System.out.println(myNode + " detected failed neighbor " + n + " with " +

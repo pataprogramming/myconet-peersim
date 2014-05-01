@@ -51,23 +51,23 @@ public class ClusteringVisualizerTransformers extends VisualizerTransformers {
 
 
   public final Transformer<MycoEdge,Integer> clusteringEdgeLengthTransformer =
-    new Transformer<MycoEdge,Integer>() {
-    public Integer transform(MycoEdge e) {
-      Pair<MycoNode> vertices = graph.getEndpoints(e);
-      HyphaData firstData = vertices.getFirst().getHyphaData();
-      HyphaData secondData = vertices.getSecond().getHyphaData();
-      if (firstData.getType() == secondData.getType()) {
-        if (firstData.isBiomass() || secondData.isBiomass()) {
-          return 50;
-        } else {
-          return 75;
+      new Transformer<MycoEdge,Integer>() {
+        public Integer transform(MycoEdge e) {
+          Pair<MycoNode> vertices = graph.getEndpoints(e);
+          HyphaData firstData = vertices.getFirst().getHyphaData();
+          HyphaData secondData = vertices.getSecond().getHyphaData();
+          if (firstData.getType() == secondData.getType()) {
+            if (firstData.isBiomass() || secondData.isBiomass()) {
+              return 50;
+            } else {
+              return 75;
+            }
+          } else {
+            //return 75;
+            return 150;
+          }
         }
-      } else {
-        //return 75;
-        return 150;
-      }
-    }
-  };
+      };
 
 
   public Transformer<MycoEdge,Integer> getEdgeLengthTransformer() {
@@ -77,26 +77,26 @@ public class ClusteringVisualizerTransformers extends VisualizerTransformers {
 
   public final Transformer<MycoEdge,Paint> clusteringEdgeDrawPaintTransformer =
       new Transformer<MycoEdge,Paint>() {
-    public Paint transform(MycoEdge e) {
-      try {
-        Pair<MycoNode> vertices = graph.getEndpoints(e);
-        HyphaData firstData = vertices.getFirst().getHyphaData();
-        HyphaData secondData = vertices.getSecond().getHyphaData();
-        if (secondData.isBiomass()) {
-          return transparent;
-        } else {
-          if (firstData.getType() == secondData.getType()) {
-            return Color.BLACK;
-          } else {
-            return Color.BLUE;
+        public Paint transform(MycoEdge e) {
+          try {
+            Pair<MycoNode> vertices = graph.getEndpoints(e);
+            HyphaData firstData = vertices.getFirst().getHyphaData();
+            HyphaData secondData = vertices.getSecond().getHyphaData();
+            if (secondData.isBiomass()) {
+              return transparent;
+            } else {
+              if (firstData.getType() == secondData.getType()) {
+                return Color.BLACK;
+              } else {
+                return Color.BLUE;
+              }
+            }
+          } catch (NullPointerException ex) {
+            log.fine("Null pointer caught");
+            return Color.RED;
           }
         }
-      } catch (NullPointerException ex) {
-        log.fine("Null pointer caught");
-        return Color.RED;
-      }
-    }
-  };
+      };
 
   public Transformer<MycoEdge,Paint> getEdgeDrawPaintTransformer() {
     return clusteringEdgeDrawPaintTransformer;
@@ -104,15 +104,15 @@ public class ClusteringVisualizerTransformers extends VisualizerTransformers {
 
   public final Transformer<MycoNode,Paint> typeColorRenderer =
       new Transformer<MycoNode,Paint>() {
-    public Paint transform(MycoNode n) {
-      HyphaData data = n.getHyphaData();
-      if (!n.isUp()) {
-        return Color.BLACK;
-      } else {
-        return typeColors.get(data.getType());
-      }
-    }
-  };
+        public Paint transform(MycoNode n) {
+          HyphaData data = n.getHyphaData();
+          if (!n.isUp()) {
+            return Color.BLACK;
+          } else {
+            return typeColors.get(data.getType());
+          }
+        }
+      };
 
   public Transformer<MycoNode,Paint> getNodeFillRenderer() {
     return typeColorRenderer;
@@ -127,31 +127,31 @@ public class ClusteringVisualizerTransformers extends VisualizerTransformers {
   final Stroke differentHyphalStroke =
       new BasicStroke(0.5f, BasicStroke.CAP_BUTT,
                       BasicStroke.JOIN_MITER, 10.0f, dash, 0.0f);
-//final Stroke noStroke = new BasicStroke(0.0f, BasicStroke.CAP_BUTT,
+  //final Stroke noStroke = new BasicStroke(0.0f, BasicStroke.CAP_BUTT,
   //                                        BasicStroke.JOIN_MITER, 1.0f);
 
 
   public final Transformer<MycoEdge,Stroke> clusteringEdgeStrokeTransformer =
       new Transformer<MycoEdge,Stroke>() {
-    public Stroke transform(MycoEdge e) {
-      Pair<MycoNode> vertices = graph.getEndpoints(e);
-      HyphaData firstData = vertices.getFirst().getHyphaData();
-      HyphaData secondData = vertices.getSecond().getHyphaData();
-      if (firstData.getType() == secondData.getType()) {
-        if (firstData.isBiomass()) {
-          return sameBiomassStroke;
-        } else {
-          return sameHyphalStroke;
+        public Stroke transform(MycoEdge e) {
+          Pair<MycoNode> vertices = graph.getEndpoints(e);
+          HyphaData firstData = vertices.getFirst().getHyphaData();
+          HyphaData secondData = vertices.getSecond().getHyphaData();
+          if (firstData.getType() == secondData.getType()) {
+            if (firstData.isBiomass()) {
+              return sameBiomassStroke;
+            } else {
+              return sameHyphalStroke;
+            }
+          } else {
+            if (firstData.isBiomass()) {
+              return sameBiomassStroke;
+            } else {
+              return sameHyphalStroke;
+            }
+          }
         }
-      } else {
-        if (firstData.isBiomass()) {
-          return sameBiomassStroke;
-        } else {
-          return sameHyphalStroke;
-        }
-      }
-    }
-  };
+      };
 
   public Transformer<MycoEdge,Stroke> getEdgeStrokeTransformer() {
     return clusteringEdgeStrokeTransformer;

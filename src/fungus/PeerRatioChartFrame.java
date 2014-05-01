@@ -18,8 +18,6 @@
  */
 
 
-
-
 package fungus;
 
 import peersim.config.*;
@@ -69,152 +67,152 @@ import org.jfree.ui.RefineryUtilities;
 //import org.jfree.ui.Spacer;
 
 public class PeerRatioChartFrame extends JFrame implements Control {
-    private static final String PAR_SIMULATION_CYCLES = "simulation.cycles";
+  private static final String PAR_SIMULATION_CYCLES = "simulation.cycles";
 
-    private static double simulationCycles;
+  private static double simulationCycles;
 
-    private MycoCast mycocast;
-    //private XYSeries averageUtilizationData;
-    //private XYSeries averageStableUtilizationData;
-    private XYSeries bulwarkRatioData;
-    private XYSeries biomassRatioData;
-    private XYSeries hyphaRatioData;
-    //private XYSeries stableHyphaRatioData;
-    JLabel chartLabel;
+  private MycoCast mycocast;
+  //private XYSeries averageUtilizationData;
+  //private XYSeries averageStableUtilizationData;
+  private XYSeries bulwarkRatioData;
+  private XYSeries biomassRatioData;
+  private XYSeries hyphaRatioData;
+  //private XYSeries stableHyphaRatioData;
+  JLabel chartLabel;
 
-    private Graph<MycoNode,MycoEdge> graph;
+  private Graph<MycoNode,MycoEdge> graph;
 
-    public PeerRatioChartFrame(String prefix) {
-        simulationCycles = Configuration.getDouble(PAR_SIMULATION_CYCLES);
-        this.setTitle("MycoNet Statistics Chart");
-        graph = JungGraphObserver.getGraph();
+  public PeerRatioChartFrame(String prefix) {
+    simulationCycles = Configuration.getDouble(PAR_SIMULATION_CYCLES);
+    this.setTitle("MycoNet Statistics Chart");
+    graph = JungGraphObserver.getGraph();
 
-        //data.add(-1,0);
-        XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.setAutoWidth(false);
-        dataset.setIntervalWidth(simulationCycles);
+    //data.add(-1,0);
+    XYSeriesCollection dataset = new XYSeriesCollection();
+    dataset.setAutoWidth(false);
+    dataset.setIntervalWidth(simulationCycles);
 
-        //averageUtilizationData = new XYSeries("Average Utilization");
-        //dataset.addSeries(averageUtilizationData);
-        //averageStableUtilizationData = new XYSeries("Avg Stable Util");
-        //dataset.addSeries(averageStableUtilizationData);
-        bulwarkRatioData = new XYSeries("Bulwark Ratio");
-        dataset.addSeries(bulwarkRatioData);
-        biomassRatioData = new XYSeries("Biomass Ratio");
-        dataset.addSeries(biomassRatioData);
-        hyphaRatioData = new XYSeries("Hypha Ratio");
-        dataset.addSeries(hyphaRatioData);
-        // stableHyphaRatioData = new XYSeries("Stable Hypha Ratio");
-        // dataset.addSeries(stableHyphaRatioData);
+    //averageUtilizationData = new XYSeries("Average Utilization");
+    //dataset.addSeries(averageUtilizationData);
+    //averageStableUtilizationData = new XYSeries("Avg Stable Util");
+    //dataset.addSeries(averageStableUtilizationData);
+    bulwarkRatioData = new XYSeries("Bulwark Ratio");
+    dataset.addSeries(bulwarkRatioData);
+    biomassRatioData = new XYSeries("Biomass Ratio");
+    dataset.addSeries(biomassRatioData);
+    hyphaRatioData = new XYSeries("Hypha Ratio");
+    dataset.addSeries(hyphaRatioData);
+    // stableHyphaRatioData = new XYSeries("Stable Hypha Ratio");
+    // dataset.addSeries(stableHyphaRatioData);
 
-        //XYSeriesCollection dataset;
+    //XYSeriesCollection dataset;
 
-        JFreeChart peerRatioChart =
-            ChartFactory.createXYLineChart("Bulwark Metrics",
-                                           "Cycle",
-                                           "Peer State Ratio",
-                                           dataset,
-                                           PlotOrientation.VERTICAL,
-                                           true, false, false);
-        ChartPanel peerRatioChartPanel = new ChartPanel(peerRatioChart);
+    JFreeChart peerRatioChart =
+        ChartFactory.createXYLineChart("Bulwark Metrics",
+                                       "Cycle",
+                                       "Peer State Ratio",
+                                       dataset,
+                                       PlotOrientation.VERTICAL,
+                                       true, false, false);
+    ChartPanel peerRatioChartPanel = new ChartPanel(peerRatioChart);
 
-        XYPlot xyplot = peerRatioChart.getXYPlot();
+    XYPlot xyplot = peerRatioChart.getXYPlot();
 
-        NumberAxis domainAxis = (NumberAxis) xyplot.getDomainAxis();
-        NumberAxis rangeAxis = (NumberAxis) xyplot.getRangeAxis();
-        domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
-        rangeAxis.setRange(0,1);
-
-
-
-        //chart.setBackgroundPaint(Color.white);
-        //XYPlot plot = chart.getXYPlot();
+    NumberAxis domainAxis = (NumberAxis) xyplot.getDomainAxis();
+    NumberAxis rangeAxis = (NumberAxis) xyplot.getRangeAxis();
+    domainAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+    rangeAxis.setRange(0,1);
 
 
-        //        BufferedImage chartImage = chart.createBufferedImage(500,300);
-        //        chartLabel = new JLabel();
-        //chartLabel.setIcon(new ImageIcon(chartImage));
+
+    //chart.setBackgroundPaint(Color.white);
+    //XYPlot plot = chart.getXYPlot();
 
 
-        Container contentPane = getContentPane();
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
-        JPanel labelPane = new JPanel();
-        labelPane.setLayout(new GridLayout(1,1));
-        //chartPane.setPreferredSize(new java.awt.Dimension(500, 300));
-        JPanel buttonPane = new JPanel();
-        buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
-
-        ////contentPane.add(labelPane,BorderLayout.PAGE_START);
-        //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
-        contentPane.add(peerRatioChartPanel, BorderLayout.CENTER);
-        //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
-        ////contentPane.add(buttonPane, BorderLayout.PAGE_END);
-
-        //data = node.getHyphaData();
-        //link = node.getHyphaLink();
-        //mycocast = node.getMycoCast();
-
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        //chartPanel.add(chartLabel);
-
-        /*JButton updateButton = new JButton("Refresh");
-        ActionListener updater = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    refreshData();
-                }
-            };
-        updateButton.addActionListener(updater);
-
-        JButton closeButton = new JButton("Close");
-        ActionListener closer = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    closeFrame();
-                }
-            };
-        closeButton.addActionListener(closer);
-
-        buttonPane.add(Box.createHorizontalGlue());
-        buttonPane.add(updateButton);
-        buttonPane.add(Box.createRigidArea(new Dimension(5,0)));
-        buttonPane.add(closeButton);
-        refreshData();
-        */
-
-        //JungGraphObserver.addChangeListener(this);
-
-        this.pack();
-        this.setVisible(true);
-    }
+    //        BufferedImage chartImage = chart.createBufferedImage(500,300);
+    //        chartLabel = new JLabel();
+    //chartLabel.setIcon(new ImageIcon(chartImage));
 
 
-    public void closeFrame() {
-        //JungGraphObserver.removeChangeListener(this);
-        dispose();
-    }
+    Container contentPane = getContentPane();
+    contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
+    JPanel labelPane = new JPanel();
+    labelPane.setLayout(new GridLayout(1,1));
+    //chartPane.setPreferredSize(new java.awt.Dimension(500, 300));
+    JPanel buttonPane = new JPanel();
+    buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
 
-    //public void stateChanged(ChangeEvent e) {
-    //    refreshData();
-    //}
+    ////contentPane.add(labelPane,BorderLayout.PAGE_START);
+    //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
+    contentPane.add(peerRatioChartPanel, BorderLayout.CENTER);
+    //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
+    ////contentPane.add(buttonPane, BorderLayout.PAGE_END);
+
+    //data = node.getHyphaData();
+    //link = node.getHyphaLink();
+    //mycocast = node.getMycoCast();
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    //chartPanel.add(chartLabel);
+
+    /*JButton updateButton = new JButton("Refresh");
+      ActionListener updater = new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+      refreshData();
+      }
+      };
+      updateButton.addActionListener(updater);
+
+      JButton closeButton = new JButton("Close");
+      ActionListener closer = new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+      closeFrame();
+      }
+      };
+      closeButton.addActionListener(closer);
+
+      buttonPane.add(Box.createHorizontalGlue());
+      buttonPane.add(updateButton);
+      buttonPane.add(Box.createRigidArea(new Dimension(5,0)));
+      buttonPane.add(closeButton);
+      refreshData();
+    */
+
+    //JungGraphObserver.addChangeListener(this);
+
+    this.pack();
+    this.setVisible(true);
+  }
 
 
-    public boolean execute() {
-        //averageUtilizationData.add(CommonState.getTime(),UtilizationObserver.hyphaUtilization);
-        //averageStableUtilizationData.add(CommonState.getTime(),UtilizationObserver.stableUtilization);
-        bulwarkRatioData.add(CommonState.getTime(),
-                             StateObserver.bulwarkRatio);
-        biomassRatioData.add(CommonState.getTime(),
-                             StateObserver.biomassRatio);
-        hyphaRatioData.add(CommonState.getTime(),
-                             StateObserver.hyphaRatio);
+  public void closeFrame() {
+    //JungGraphObserver.removeChangeListener(this);
+    dispose();
+  }
 
-        //stableHyphaRatioData.add(CommonState.getTime(),UtilizationObserver.stableHyphaRatio);
+  //public void stateChanged(ChangeEvent e) {
+  //    refreshData();
+  //}
 
 
-        //BufferedImage chartImage = chart.createBufferedImage(500,300);
-        //chartLabel = new JLabel();        chartLabel.setIcon(new ImageIcon(chartImage));
-        this.pack();
-       return false;
-    }
+  public boolean execute() {
+    //averageUtilizationData.add(CommonState.getTime(),UtilizationObserver.hyphaUtilization);
+    //averageStableUtilizationData.add(CommonState.getTime(),UtilizationObserver.stableUtilization);
+    bulwarkRatioData.add(CommonState.getTime(),
+                         StateObserver.bulwarkRatio);
+    biomassRatioData.add(CommonState.getTime(),
+                         StateObserver.biomassRatio);
+    hyphaRatioData.add(CommonState.getTime(),
+                       StateObserver.hyphaRatio);
+
+    //stableHyphaRatioData.add(CommonState.getTime(),UtilizationObserver.stableHyphaRatio);
+
+
+    //BufferedImage chartImage = chart.createBufferedImage(500,300);
+    //chartLabel = new JLabel();        chartLabel.setIcon(new ImageIcon(chartImage));
+    this.pack();
+    return false;
+  }
 
 }

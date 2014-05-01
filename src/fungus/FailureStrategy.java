@@ -23,7 +23,7 @@ package fungus;
 //import com.google.common.base.Function;
 
 public interface FailureStrategy {
-    // Amount of AlertHormone to generate when node fails
+  // Amount of AlertHormone to generate when node fails
   public abstract Double apply(MycoNode thisNode, HyphaType thisType,
                                int thisDegree, MycoNode failedNode,
                                HyphaType failedType, int failedDegree);

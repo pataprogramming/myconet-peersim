@@ -56,13 +56,13 @@ public class HITAPVisualizerTransformers extends VisualizerTransformers {
 
   public Transformer<MycoNode,String> alertNodeLabeller =
       new Transformer<MycoNode,String>() {
-    public String transform(MycoNode n) {
-      return Long.toString(n.getID()) + "(" +
-      Long.toString(n.getHyphaData().getMaxCapacity()) + "," +
-      df.format(((ChemicalManager) n.getProtocol(chemicalManagerPid))
-                .getConcentration(AlertHormone.class)) + ")";
-    }
-  };
+        public String transform(MycoNode n) {
+          return Long.toString(n.getID()) + "(" +
+          Long.toString(n.getHyphaData().getMaxCapacity()) + "," +
+          df.format(((ChemicalManager) n.getProtocol(chemicalManagerPid))
+                    .getConcentration(AlertHormone.class)) + ")";
+        }
+      };
 
 
   public Transformer<MycoNode,String> getNodeLabeller() {
@@ -72,21 +72,21 @@ public class HITAPVisualizerTransformers extends VisualizerTransformers {
 
   public Transformer<MycoNode,Shape> hitapShapeTransformer =
       new Transformer<MycoNode,Shape>() {
-    public Shape transform(MycoNode n) {
-      HyphaData data = n.getHyphaData();
-      if (data.isExtending()) {
-        return extendingShape;
-      } else if (data.isBranching()) {
-        return branchingShape;
-      } else if (data.isImmobile()) {
-        return immobileShape;
-      } else if (data.isBulwark()) {
-        return bulwarkShape;
-      } else {
-        return biomassShape;
-      }
-    }
-  };
+        public Shape transform(MycoNode n) {
+          HyphaData data = n.getHyphaData();
+          if (data.isExtending()) {
+            return extendingShape;
+          } else if (data.isBranching()) {
+            return branchingShape;
+          } else if (data.isImmobile()) {
+            return immobileShape;
+          } else if (data.isBulwark()) {
+            return bulwarkShape;
+          } else {
+            return biomassShape;
+          }
+        }
+      };
 
   public Transformer<MycoNode,Shape> getShapeTransformer(boolean scaledShapes)
   {
@@ -96,35 +96,35 @@ public class HITAPVisualizerTransformers extends VisualizerTransformers {
 
   public Transformer<MycoNode,Paint> concentrationPaintTransformer =
       new Transformer<MycoNode,Paint>() {
-    // FIXME: Hard-coded config strings
-    float concMax = (float)
-    Configuration.getDouble("config.alert.max_concentration");
-    float threshold = (float)
-    Configuration.getDouble("config.thresholdbulwark.threshold");
+        // FIXME: Hard-coded config strings
+        float concMax = (float)
+            Configuration.getDouble("config.alert.max_concentration");
+        float threshold = (float)
+            Configuration.getDouble("config.thresholdbulwark.threshold");
 
-    float upperRange = concMax - threshold;
-    float lowerRange = threshold;
+        float upperRange = concMax - threshold;
+        float lowerRange = threshold;
 
-    public Paint transform(MycoNode n) {
-      HyphaData data = n.getHyphaData();
-      ChemicalManager cm =
-          (ChemicalManager) n.getProtocol(chemicalManagerPid);
-      FailureAlerter fa = (FailureAlerter) n.getProtocol(failureAlerterPid);
+        public Paint transform(MycoNode n) {
+          HyphaData data = n.getHyphaData();
+          ChemicalManager cm =
+              (ChemicalManager) n.getProtocol(chemicalManagerPid);
+          FailureAlerter fa = (FailureAlerter) n.getProtocol(failureAlerterPid);
 
-      float conc = (float) cm.getConcentration(AlertHormone.class);
-      if (conc > concMax) conc = concMax;
+          float conc = (float) cm.getConcentration(AlertHormone.class);
+          if (conc > concMax) conc = concMax;
 
-      if (!n.isUp()) {
-        return Color.BLACK;
-      } else if (conc >= threshold) {
-        float val = (conc - threshold) / upperRange;
-        return new Color(1.0f, 0.0f, val);
-      } else {
-        float val = conc / lowerRange;
-        return new Color(val, 1.0f, 0.0f);
-      }
-    }
-  };
+          if (!n.isUp()) {
+            return Color.BLACK;
+          } else if (conc >= threshold) {
+            float val = (conc - threshold) / upperRange;
+            return new Color(1.0f, 0.0f, val);
+          } else {
+            float val = conc / lowerRange;
+            return new Color(val, 1.0f, 0.0f);
+          }
+        }
+      };
 
 
   public Transformer<MycoNode,Paint> getNodeFillRenderer() {

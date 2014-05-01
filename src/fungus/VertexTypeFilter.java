@@ -25,10 +25,10 @@ import org.apache.commons.collections15.functors.*;
 import edu.uci.ics.jung.algorithms.filters.*;
 
 public class VertexTypeFilter extends VertexPredicateFilter<MycoNode,MycoEdge> {
-    public int type;
+  public int type;
 
-    public VertexTypeFilter(int type) {
-        super(new TypePredicate(type));
-        this.type = type;
-    }
+  public VertexTypeFilter(int type) {
+    super(new TypePredicate(type));
+    this.type = type;
+  }
 }

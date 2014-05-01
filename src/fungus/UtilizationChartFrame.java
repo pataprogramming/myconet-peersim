@@ -18,8 +18,6 @@
  */
 
 
-
-
 package fungus;
 
 import peersim.config.*;
@@ -67,131 +65,135 @@ import org.jfree.ui.RefineryUtilities;
 //import org.jfree.ui.Spacer;
 
 public class UtilizationChartFrame extends JFrame implements Control {
-    private static final String PAR_SIMULATION_CYCLES = "simulation.cycles";
+  private static final String PAR_SIMULATION_CYCLES = "simulation.cycles";
 
-    private static double simulationCycles;
+  private static double simulationCycles;
 
-    private MycoCast mycocast;
-    private XYSeries averageUtilizationData;
-    private XYSeries averageStableUtilizationData;
-    private XYSeries hyphaRatioData;
-    private XYSeries stableHyphaRatioData;
-    JLabel chartLabel;
+  private MycoCast mycocast;
+  private XYSeries averageUtilizationData;
+  private XYSeries averageStableUtilizationData;
+  private XYSeries hyphaRatioData;
+  private XYSeries stableHyphaRatioData;
+  JLabel chartLabel;
 
-    private Graph<MycoNode,MycoEdge> graph;
+  private Graph<MycoNode,MycoEdge> graph;
 
-    public UtilizationChartFrame(String prefix) {
-        simulationCycles = Configuration.getDouble(PAR_SIMULATION_CYCLES);
-        this.setTitle("MycoNet Statistics Chart");
-        graph = JungGraphObserver.getGraph();
+  public UtilizationChartFrame(String prefix) {
+    simulationCycles = Configuration.getDouble(PAR_SIMULATION_CYCLES);
+    this.setTitle("MycoNet Statistics Chart");
+    graph = JungGraphObserver.getGraph();
 
-        //data.add(-1,0);
-        XYSeriesCollection dataset = new XYSeriesCollection();
-        dataset.setAutoWidth(false);
-        dataset.setIntervalWidth(simulationCycles);
+    //data.add(-1,0);
+    XYSeriesCollection dataset = new XYSeriesCollection();
+    dataset.setAutoWidth(false);
+    dataset.setIntervalWidth(simulationCycles);
 
-        averageUtilizationData = new XYSeries("Average Utilization");
-        dataset.addSeries(averageUtilizationData);
-        averageStableUtilizationData = new XYSeries("Avg Stable Util");
-        dataset.addSeries(averageStableUtilizationData);
-        hyphaRatioData = new XYSeries("Hypha Ratio");
-        dataset.addSeries(hyphaRatioData);
-        stableHyphaRatioData = new XYSeries("Stable Hypha Ratio");
-        dataset.addSeries(stableHyphaRatioData);
+    averageUtilizationData = new XYSeries("Average Utilization");
+    dataset.addSeries(averageUtilizationData);
+    averageStableUtilizationData = new XYSeries("Avg Stable Util");
+    dataset.addSeries(averageStableUtilizationData);
+    hyphaRatioData = new XYSeries("Hypha Ratio");
+    dataset.addSeries(hyphaRatioData);
+    stableHyphaRatioData = new XYSeries("Stable Hypha Ratio");
+    dataset.addSeries(stableHyphaRatioData);
 
-        //XYSeriesCollection dataset;
+    //XYSeriesCollection dataset;
 
-        JFreeChart utilizationChart =
-            ChartFactory.createXYLineChart("Utilization Metrics",
-                                           "Cycle",
-                                           "Average Utilization",
-                                           dataset,
-                                           PlotOrientation.VERTICAL,
-                                           true, false, false);
-        ChartPanel utilizationChartPanel = new ChartPanel(utilizationChart);
+    JFreeChart utilizationChart =
+        ChartFactory.createXYLineChart("Utilization Metrics",
+                                       "Cycle",
+                                       "Average Utilization",
+                                       dataset,
+                                       PlotOrientation.VERTICAL,
+                                       true, false, false);
+    ChartPanel utilizationChartPanel = new ChartPanel(utilizationChart);
 
-        //chart.setBackgroundPaint(Color.white);
-        //XYPlot plot = chart.getXYPlot();
-
-
-        //        BufferedImage chartImage = chart.createBufferedImage(500,300);
-        //        chartLabel = new JLabel();
-        //chartLabel.setIcon(new ImageIcon(chartImage));
+    //chart.setBackgroundPaint(Color.white);
+    //XYPlot plot = chart.getXYPlot();
 
 
-        Container contentPane = getContentPane();
-        contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
-        JPanel labelPane = new JPanel();
-        labelPane.setLayout(new GridLayout(1,1));
-        //chartPane.setPreferredSize(new java.awt.Dimension(500, 300));
-        JPanel buttonPane = new JPanel();
-        buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
-
-        ////contentPane.add(labelPane,BorderLayout.PAGE_START);
-        //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
-        contentPane.add(utilizationChartPanel, BorderLayout.CENTER);
-        //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
-        ////contentPane.add(buttonPane, BorderLayout.PAGE_END);
-
-        //data = node.getHyphaData();
-        //link = node.getHyphaLink();
-        //mycocast = node.getMycoCast();
-
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        //chartPanel.add(chartLabel);
-
-        /*JButton updateButton = new JButton("Refresh");
-        ActionListener updater = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    refreshData();
-                }
-            };
-        updateButton.addActionListener(updater);
-
-        JButton closeButton = new JButton("Close");
-        ActionListener closer = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    closeFrame();
-                }
-            };
-        closeButton.addActionListener(closer);
-
-        buttonPane.add(Box.createHorizontalGlue());
-        buttonPane.add(updateButton);
-        buttonPane.add(Box.createRigidArea(new Dimension(5,0)));
-        buttonPane.add(closeButton);
-        refreshData();
-        */
-
-        //JungGraphObserver.addChangeListener(this);
-
-        this.pack();
-        this.setVisible(true);
-    }
+    //        BufferedImage chartImage = chart.createBufferedImage(500,300);
+    //        chartLabel = new JLabel();
+    //chartLabel.setIcon(new ImageIcon(chartImage));
 
 
-    public void closeFrame() {
-        //JungGraphObserver.removeChangeListener(this);
-        dispose();
-    }
+    Container contentPane = getContentPane();
+    contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.PAGE_AXIS));
+    JPanel labelPane = new JPanel();
+    labelPane.setLayout(new GridLayout(1,1));
+    //chartPane.setPreferredSize(new java.awt.Dimension(500, 300));
+    JPanel buttonPane = new JPanel();
+    buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
 
-    //public void stateChanged(ChangeEvent e) {
-    //    refreshData();
-    //}
+    ////contentPane.add(labelPane,BorderLayout.PAGE_START);
+    //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
+    contentPane.add(utilizationChartPanel, BorderLayout.CENTER);
+    //contentPane.add(Box.createRigidArea(new Dimension(0,5)));
+    ////contentPane.add(buttonPane, BorderLayout.PAGE_END);
+
+    //data = node.getHyphaData();
+    //link = node.getHyphaLink();
+    //mycocast = node.getMycoCast();
+
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    //chartPanel.add(chartLabel);
+
+    /*JButton updateButton = new JButton("Refresh");
+      ActionListener updater = new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+      refreshData();
+      }
+      };
+      updateButton.addActionListener(updater);
+
+      JButton closeButton = new JButton("Close");
+      ActionListener closer = new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+      closeFrame();
+      }
+      };
+      closeButton.addActionListener(closer);
+
+      buttonPane.add(Box.createHorizontalGlue());
+      buttonPane.add(updateButton);
+      buttonPane.add(Box.createRigidArea(new Dimension(5,0)));
+      buttonPane.add(closeButton);
+      refreshData();
+    */
+
+    //JungGraphObserver.addChangeListener(this);
+
+    this.pack();
+    this.setVisible(true);
+  }
 
 
-    public boolean execute() {
-        averageUtilizationData.add(CommonState.getTime(),UtilizationObserver.hyphaUtilization);
-        averageStableUtilizationData.add(CommonState.getTime(),UtilizationObserver.stableUtilization);
-        hyphaRatioData.add(CommonState.getTime(),UtilizationObserver.hyphaRatio);
-        stableHyphaRatioData.add(CommonState.getTime(),UtilizationObserver.stableHyphaRatio);
+  public void closeFrame() {
+    //JungGraphObserver.removeChangeListener(this);
+    dispose();
+  }
+
+  //public void stateChanged(ChangeEvent e) {
+  //    refreshData();
+  //}
 
 
-        //BufferedImage chartImage = chart.createBufferedImage(500,300);
-        //chartLabel = new JLabel();        chartLabel.setIcon(new ImageIcon(chartImage));
-        this.pack();
-       return false;
-    }
+  public boolean execute() {
+    averageUtilizationData.add(CommonState.getTime(),
+                               UtilizationObserver.hyphaUtilization);
+    averageStableUtilizationData.add(CommonState.getTime(),
+                                     UtilizationObserver.stableUtilization);
+    hyphaRatioData.add(CommonState.getTime(),
+                       UtilizationObserver.hyphaRatio);
+    stableHyphaRatioData.add(CommonState.getTime(),
+                             UtilizationObserver.stableHyphaRatio);
+
+
+    //BufferedImage chartImage = chart.createBufferedImage(500,300);
+    //chartLabel = new JLabel();        chartLabel.setIcon(new ImageIcon(chartImage));
+    this.pack();
+    return false;
+  }
 
 }

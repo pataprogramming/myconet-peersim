@@ -23,7 +23,7 @@ package fungus;
 import java.util.Comparator;
 
 public class MycoNodeDegreeComparator implements Comparator<MycoNode> {
-    public int compare(MycoNode n1, MycoNode n2) {
-        return new Integer(n2.getHyphaLink().degree()).compareTo(n1.getHyphaLink().degree());
-    }
+  public int compare(MycoNode n1, MycoNode n2) {
+    return new Integer(n2.getHyphaLink().degree()).compareTo(n1.getHyphaLink().degree());
+  }
 }

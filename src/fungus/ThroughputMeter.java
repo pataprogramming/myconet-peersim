@@ -24,33 +24,33 @@ import peersim.cdsim.CDState;
 
 public class ThroughputMeter {
 
-        private int completedInPeriod = 0;
-        private double throughput = 0;
+  private int completedInPeriod = 0;
+  private double throughput = 0;
 
-        private int currentPeriod = 0;
+  private int currentPeriod = 0;
 
-        public void completeJob(Job j) {
+  public void completeJob(Job j) {
 
-                // if (CDState.getCycle()/BurstJobGenerator.period > currentPeriod) {
+    // if (CDState.getCycle()/BurstJobGenerator.period > currentPeriod) {
 
-                //         currentPeriod++;
-                //         //throughput = completedInPeriod / JobGenerator.period;
-                //         //throughput = completedInPeriod;
+    //         currentPeriod++;
+    //         //throughput = completedInPeriod / JobGenerator.period;
+    //         //throughput = completedInPeriod;
 
-                //         completedInPeriod = 0;
+    //         completedInPeriod = 0;
 
-                // }
-                // completedInPeriod++;
-        }
+    // }
+    // completedInPeriod++;
+  }
 
-        public double getThroughput() {
-                return throughput;
-        }
+  public double getThroughput() {
+    return throughput;
+  }
 
-        public double getThroughputOptimality() {
-                //System.out.println("Totalcapacity at cycle " + CDState.getCycle() + " is " + TypeObserver.getTotalCapacity() +
-                //              " and the throughput is " + throughput);
-                return throughput / TypeObserver.getTotalCapacity();
-        }
+  public double getThroughputOptimality() {
+    //System.out.println("Totalcapacity at cycle " + CDState.getCycle() + " is " + TypeObserver.getTotalCapacity() +
+    //              " and the throughput is " + throughput);
+    return throughput / TypeObserver.getTotalCapacity();
+  }
 
 }

@@ -23,6 +23,6 @@ package fungus;
 import java.util.EventListener;
 
 public interface HyphaLinkListener extends EventListener {
-    public void linkAdded(MycoNode a, MycoNode b);
-    public void linkRemoved(MycoNode a, MycoNode b);
+  public void linkAdded(MycoNode a, MycoNode b);
+  public void linkRemoved(MycoNode a, MycoNode b);
 }

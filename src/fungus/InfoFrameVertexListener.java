@@ -45,9 +45,9 @@ import org.apache.commons.collections15.*;
 import org.apache.commons.collections15.functors.*;
 
 public class InfoFrameVertexListener implements GraphMouseListener<MycoNode> {
-    public void graphClicked(MycoNode v, MouseEvent e) {
-        JFrame f = new MycoNodeFrame(v);
-    }
-    public void graphPressed(MycoNode v, MouseEvent e) { }
-    public void graphReleased(MycoNode v, MouseEvent e) { }
+  public void graphClicked(MycoNode v, MouseEvent e) {
+    JFrame f = new MycoNodeFrame(v);
+  }
+  public void graphPressed(MycoNode v, MouseEvent e) { }
+  public void graphReleased(MycoNode v, MouseEvent e) { }
 }

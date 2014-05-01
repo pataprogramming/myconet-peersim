@@ -28,15 +28,15 @@ import java.util.logging.*;
 
 
 public class MycoNodeCapacityComparator implements Comparator<MycoNode> {
-    public int compare(MycoNode m1, MycoNode m2) {
-        /*MycoNode m1 = (MycoNode) o1;
-          MycoNode m2 = (MycoNode) o2;*/
-        Integer c1 = new Integer(m1.getHyphaData().getMaxCapacity());
-        Integer c2 = new Integer(m2.getHyphaData().getMaxCapacity());
-        return c1.compareTo(c2);
-    }
+  public int compare(MycoNode m1, MycoNode m2) {
+    /*MycoNode m1 = (MycoNode) o1;
+      MycoNode m2 = (MycoNode) o2;*/
+    Integer c1 = new Integer(m1.getHyphaData().getMaxCapacity());
+    Integer c2 = new Integer(m2.getHyphaData().getMaxCapacity());
+    return c1.compareTo(c2);
+  }
 
-    public boolean equals(MycoNode o1, MycoNode o2) {
-        return compare(o1,o2) == 0;
-    }
+  public boolean equals(MycoNode o1, MycoNode o2) {
+    return compare(o1,o2) == 0;
+  }
 }

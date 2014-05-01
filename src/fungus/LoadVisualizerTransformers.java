@@ -35,7 +35,7 @@ import edu.uci.ics.jung.graph.util.Pair;
 import org.apache.commons.collections15.Transformer;
 
 public class LoadVisualizerTransformers extends
-                                                ClusteringVisualizerTransformers
+                                          ClusteringVisualizerTransformers
 {
 
   // FIXME: Need to replace getMetric() from old mycoload code with something
@@ -96,13 +96,13 @@ public class LoadVisualizerTransformers extends
 
 
   final Stroke fatStroke = new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
-                                                 BasicStroke.JOIN_MITER);
+                                           BasicStroke.JOIN_MITER);
   final Transformer<MycoNode,Stroke>  queueStrokeRenderer =
       new Transformer<MycoNode,Stroke>() {
-    public Stroke transform(MycoNode n) {
-      return fatStroke;
-    }
-  };
+        public Stroke transform(MycoNode n) {
+          return fatStroke;
+        }
+      };
 
   public Transformer<MycoNode,Stroke> getVertexStrokeTransformer() {
     return queueStrokeRenderer;

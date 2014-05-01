@@ -32,79 +32,79 @@ import edu.uci.ics.jung.graph.Graph;
 
 public class JobController implements Control {
 
-    private static List<Graph<MycoNode, MycoEdge>> typeGraphs;
+  private static List<Graph<MycoNode, MycoEdge>> typeGraphs;
 
-    private static List<JobStats> stats = new ArrayList<JobStats>();
-    private static Queue<Job> queue = new LinkedList<Job>();
-    public static ResponseTimePeriodManager responseTimeManager = null;
-    private static ThroughputMeter tm = new ThroughputMeter();
+  private static List<JobStats> stats = new ArrayList<JobStats>();
+  private static Queue<Job> queue = new LinkedList<Job>();
+  public static ResponseTimePeriodManager responseTimeManager = null;
+  private static ThroughputMeter tm = new ThroughputMeter();
 
-    private static Logger log = Logger.getLogger(JobController.class.getName());
+  private static Logger log = Logger.getLogger(JobController.class.getName());
 
-    public JobController(String prefix) {
-      if (responseTimeManager == null) {
-          responseTimeManager = new ResponseTimePeriodManager();
-      }
+  public JobController(String prefix) {
+    if (responseTimeManager == null) {
+      responseTimeManager = new ResponseTimePeriodManager();
+    }
+  }
+
+  public static void complete(Job j) {
+    // FIXME: rationalize logic for completing jobs
+    stats.get(j.type).complete(j);
+    responseTimeManager.completeJob(j);
+    tm.completeJob(j);
+
+  }
+
+  public static void rescue(Job j) {
+    queue.add(j);
+  }
+
+  public boolean execute() {
+    while (stats.size() < HyphaData.numTypes) {
+      stats.add(new JobStats(stats.size()));
+    }
+    log.fine(queue.size() + " jobs from dead nodes need to be requeued.");
+    while (!queue.isEmpty()) {
+      Job j = queue.remove();
+      MycoNode n = TypeObserver.getRandomNodeOfType(j.type);
+      log.finer("Requeueing job " + j + " at node " + n);
+      j.requeue(n);
     }
 
-    public static void complete(Job j) {
-        // FIXME: rationalize logic for completing jobs
-        stats.get(j.type).complete(j);
-        responseTimeManager.completeJob(j);
-        tm.completeJob(j);
+    StringBuilder sb = new StringBuilder();
+    java.util.Formatter f = new java.util.Formatter(sb, Locale.US);
 
+    f.format("Job statistics: ");
+    for (JobStats js : stats) {
+      f.format("%s ", js.toString());
     }
 
-    public static void rescue(Job j) {
-        queue.add(j);
+    log.fine(sb.toString());
+
+    sb = new StringBuilder();
+    f = new java.util.Formatter(sb, Locale.US);
+
+    f.format("Active jobs: ");
+    for (int i = 0; i < TypeObserver.getNumTypes(); i++) {
+      f.format("%d:%d/%d ", i, TypeObserver.getActiveJobsOfType(i),
+               TypeObserver.getTypeCapacity(i));
     }
 
-    public boolean execute() {
-        while (stats.size() < HyphaData.numTypes) {
-            stats.add(new JobStats(stats.size()));
-        }
-        log.fine(queue.size() + " jobs from dead nodes need to be requeued.");
-        while (!queue.isEmpty()) {
-            Job j = queue.remove();
-            MycoNode n = TypeObserver.getRandomNodeOfType(j.type);
-            log.finer("Requeueing job " + j + " at node " + n);
-            j.requeue(n);
-        }
+    log.fine(sb.toString());
 
-        StringBuilder sb = new StringBuilder();
-        java.util.Formatter f = new java.util.Formatter(sb, Locale.US);
+    return false;
+  }
 
-        f.format("Job statistics: ");
-        for (JobStats js : stats) {
-            f.format("%s ", js.toString());
-        }
+  public static List<JobStats> getJobStats() {
+    return stats;
+  }
 
-        log.fine(sb.toString());
+  public static double getThroughput() {
+    return tm.getThroughput();
+  }
 
-        sb = new StringBuilder();
-        f = new java.util.Formatter(sb, Locale.US);
-
-        f.format("Active jobs: ");
-        for (int i = 0; i < TypeObserver.getNumTypes(); i++) {
-          f.format("%d:%d/%d ", i, TypeObserver.getActiveJobsOfType(i),
-                   TypeObserver.getTypeCapacity(i));
-        }
-
-        log.fine(sb.toString());
-
-        return false;
-    }
-
-    public static List<JobStats> getJobStats() {
-        return stats;
-    }
-
-    public static double getThroughput() {
-        return tm.getThroughput();
-    }
-
-    public static double getThroughputOptimality() {
-        return tm.getThroughputOptimality();
-    }
+  public static double getThroughputOptimality() {
+    return tm.getThroughputOptimality();
+  }
 
 }

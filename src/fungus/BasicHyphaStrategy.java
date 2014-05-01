@@ -95,8 +95,8 @@ public abstract class BasicHyphaStrategy extends DynamicsStrategy {
         && maxBiomassCapacity > node.getHyphaData().getMaxCapacity()) {
       MycoNode parent = maxBiomass.getHyphaLink().getParent();
       log.log(Level.FINE, node + " IS STEALING BIOMASS NODE "
-              + maxBiomass + " FROM NODE " + parent, new Object[] { node,
-                                                                    maxBiomass, parent });
+              + maxBiomass + " FROM NODE " + parent,
+              new Object[] { node, maxBiomass, parent });
       parent.getHyphaLink().transferNeighbor(maxBiomass, node);
       myMaxBiomass = maxBiomass;
     }

@@ -241,10 +241,10 @@ public class JungVisualizer implements Control {
 
     Transformer<MycoEdge,Paint> transparentEdges =
         new Transformer<MycoEdge, Paint>() {
-      public Paint transform(MycoEdge e) {
-        return transparent;
-      }
-    };
+          public Paint transform(MycoEdge e) {
+            return transparent;
+          }
+        };
 
     visualizer.setBackground(Color.WHITE);
 

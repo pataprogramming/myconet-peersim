@@ -21,14 +21,14 @@
 package fungus;
 
 public abstract class Metric<T> {
-    public Metric(String name) {
-        this.name = name;
-    }
+  public Metric(String name) {
+    this.name = name;
+  }
 
-    public String name;
-    public abstract T fetch();
+  public String name;
+  public abstract T fetch();
 
-    public String toString() {
-        return fetch().toString();
-    }
+  public String toString() {
+    return fetch().toString();
+  }
 }

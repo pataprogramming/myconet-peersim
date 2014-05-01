@@ -47,37 +47,35 @@ import org.apache.commons.collections15.*;
 import org.apache.commons.collections15.functors.*;
 
 public class MycoEdge {
-    private static Logger log =
-        Logger.getLogger(MycoEdge.class.getName());
-    private static int edgeCount = 0;
+  private static Logger log =
+      Logger.getLogger(MycoEdge.class.getName());
+  private static int edgeCount = 0;
 
-    private double capacity;
-    private double weight;
-    private int id;
+  private double capacity;
+  private double weight;
+  private int id;
 
-    public MycoEdge() {
-        capacity = 1.0;
-        weight = 1.0;
-        id = edgeCount++;
-    }
+  public MycoEdge() {
+    capacity = 1.0;
+    weight = 1.0;
+    id = edgeCount++;
+  }
 
-    public MycoEdge(double c, double w) {
-        this();
-        this.capacity = c;
-        this.weight = w;
-    }
+  public MycoEdge(double c, double w) {
+    this();
+    this.capacity = c;
+    this.weight = w;
+  }
 
-    public int getID() { return id; }
+  public int getID() { return id; }
 
-    public double getCapacity() { return capacity; }
-    public void setCapacity(double c) { capacity = c; }
-    public double getWeight() { return weight; }
-    public void setWeight(double w) { weight = w; }
+  public double getCapacity() { return capacity; }
+  public void setCapacity(double c) { capacity = c; }
+  public double getWeight() { return weight; }
+  public void setWeight(double w) { weight = w; }
 
-    public String toString() {
-        return "E" + id;
-    }
+  public String toString() {
+    return "E" + id;
+  }
 
 }
-
-

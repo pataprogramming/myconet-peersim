@@ -21,5 +21,5 @@
 package fungus;
 
 public interface MetabolismStrategy {
-    public abstract double apply(MycoNode n);
+  public abstract double apply(MycoNode n);
 }

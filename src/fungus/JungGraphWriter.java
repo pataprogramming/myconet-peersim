@@ -67,62 +67,62 @@ public class JungGraphWriter implements Control {
   private static GraphMLWriter<MycoNode, MycoEdge> writer;
 
   public Transformer<Hypergraph<MycoNode,MycoEdge>,String>
-      experimentTransformer =
+    experimentTransformer =
       new Transformer<Hypergraph<MycoNode,MycoEdge>,String>() {
-    public String transform(Hypergraph<MycoNode,MycoEdge> g) {
-      return basename;
-    }
-  };
+        public String transform(Hypergraph<MycoNode,MycoEdge> g) {
+          return basename;
+        }
+      };
 
   public Transformer<Hypergraph<MycoNode,MycoEdge>,String> seedTransformer
-      = new Transformer<Hypergraph<MycoNode,MycoEdge>,String>() {
-    public String transform(Hypergraph<MycoNode,MycoEdge> g) {
-      return seed;
-    }
-  };
+    = new Transformer<Hypergraph<MycoNode,MycoEdge>,String>() {
+        public String transform(Hypergraph<MycoNode,MycoEdge> g) {
+          return seed;
+        }
+      };
 
   public Transformer<Hypergraph<MycoNode,MycoEdge>,String> cycleTransformer
-      = new Transformer<Hypergraph<MycoNode,MycoEdge>,String>() {
-    public String transform(Hypergraph<MycoNode,MycoEdge> g) {
-      return new Integer(CDState.getCycle()).toString();
-    }
-  };
+    = new Transformer<Hypergraph<MycoNode,MycoEdge>,String>() {
+        public String transform(Hypergraph<MycoNode,MycoEdge> g) {
+          return new Integer(CDState.getCycle()).toString();
+        }
+      };
 
   public Transformer<MycoNode,String> capacityTransformer =
       new Transformer<MycoNode,String>() {
-    public String transform(MycoNode n) {
-      return new Integer(n.getHyphaData().getCapacity()).toString();
-    }
-  };
+        public String transform(MycoNode n) {
+          return new Integer(n.getHyphaData().getCapacity()).toString();
+        }
+      };
 
   public Transformer<MycoNode,String> hormoneTransformer =
       new Transformer<MycoNode,String>() {
-    public String transform(MycoNode n) {
-      return new Double(((ChemicalManager) n.getProtocol(chemicalManagerPid))
-                        .getConcentration(AlertHormone.class)).toString();
-    }
-  };
+        public String transform(MycoNode n) {
+          return new Double(((ChemicalManager) n.getProtocol(chemicalManagerPid))
+                            .getConcentration(AlertHormone.class)).toString();
+        }
+      };
 
   public Transformer<MycoNode,String> stateTransformer =
       new Transformer<MycoNode,String>() {
-    public String transform(MycoNode n) {
-      return n.getHyphaData().getState().toString();
-    }
-  };
+        public String transform(MycoNode n) {
+          return n.getHyphaData().getState().toString();
+        }
+      };
 
   public Transformer<MycoNode,String> serviceTransformer =
       new Transformer<MycoNode,String>() {
-    public String transform(MycoNode n) {
-      return new Integer(n.getHyphaData().getType()).toString();
-    }
-  };
+        public String transform(MycoNode n) {
+          return new Integer(n.getHyphaData().getType()).toString();
+        }
+      };
 
   public Transformer<MycoNode,String> idTransformer =
       new Transformer<MycoNode,String>() {
-    public String transform(MycoNode n) {
-      return new Long(n.getID()).toString();
-    }
-  };
+        public String transform(MycoNode n) {
+          return new Long(n.getID()).toString();
+        }
+      };
 
   public JungGraphWriter(String name) {
     this.name = name;

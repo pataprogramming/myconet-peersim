@@ -24,45 +24,44 @@ import peersim.config.*;
 
 public class AlertHormone extends Chemical {
 
-    private static final String PAR_DIFFUSION_RATE =
-        "config.alert.diffusion_rate";
-    private static final String PAR_DECAY_RATE =
-        "config.alert.decay_rate";
-    private static final String PAR_MAX_CONCENTRATION =
-        "config.alert.max_concentration";
+  private static final String PAR_DIFFUSION_RATE =
+      "config.alert.diffusion_rate";
+  private static final String PAR_DECAY_RATE =
+      "config.alert.decay_rate";
+  private static final String PAR_MAX_CONCENTRATION =
+      "config.alert.max_concentration";
 
-    private static double diffusionRate;
-    private static double decayRate;
-    private static double maxConcentration;
+  private static double diffusionRate;
+  private static double decayRate;
+  private static double maxConcentration;
 
-    private boolean initialized = false;
-    public AlertHormone(double amount) {
-        super();
-        name = "AlertHormone";
+  private boolean initialized = false;
+  public AlertHormone(double amount) {
+    super();
+    name = "AlertHormone";
 
-        if (!initialized) {
-            diffusionRate = Configuration.getDouble(PAR_DIFFUSION_RATE);
-            decayRate = Configuration.getDouble(PAR_DECAY_RATE);
-            maxConcentration = Configuration.getDouble(PAR_MAX_CONCENTRATION);
-        }
-        this.setAmount(amount);
+    if (!initialized) {
+      diffusionRate = Configuration.getDouble(PAR_DIFFUSION_RATE);
+      decayRate = Configuration.getDouble(PAR_DECAY_RATE);
+      maxConcentration = Configuration.getDouble(PAR_MAX_CONCENTRATION);
     }
+    this.setAmount(amount);
+  }
 
 
-    public AlertHormone() {
-        this(0.0);
-    }
+  public AlertHormone() {
+    this(0.0);
+  }
 
 
+  public double getDiffusionRate() { return diffusionRate; }
+  public double getDecayRate() { return decayRate; }
+  public double getMaxConcentration() { return maxConcentration; }
 
-    public double getDiffusionRate() { return diffusionRate; }
-    public double getDecayRate() { return decayRate; }
-    public double getMaxConcentration() { return maxConcentration; }
+  public Object clone() {
+    AlertHormone ret = new AlertHormone(amount);
 
-    public Object clone() {
-        AlertHormone ret = new AlertHormone(amount);
+    return ret;
 
-        return ret;
-
-    }
+  }
 }

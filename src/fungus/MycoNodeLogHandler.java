@@ -29,74 +29,74 @@ import javax.swing.event.*;
 import com.google.common.collect.Iterables;
 
 public class MycoNodeLogHandler extends Handler {
-    private static LogManager manager = LogManager.getLogManager();
-    private static Logger rootLogger = Logger.getLogger("fungus");
+  private static LogManager manager = LogManager.getLogManager();
+  private static Logger rootLogger = Logger.getLogger("fungus");
 
-    private MycoNode n;
-    private Formatter formatter;
-    private JTextArea textArea;
+  private MycoNode n;
+  private Formatter formatter;
+  private JTextArea textArea;
 
-    private Set<ChangeListener> changeListeners;
+  private Set<ChangeListener> changeListeners;
 
 
-    public MycoNodeLogHandler(MycoNode n, JTextArea textArea) {
-        this.n = n;
-        this.textArea = textArea;
-        this.formatter = new MiniFormatter();
-        this.changeListeners = new HashSet<ChangeListener>();
-        this.setFormatter(formatter);
-        this.setFilter(makeFilter(n));
-        this.setLevel(Level.FINER);
-        rootLogger.addHandler(this);
+  public MycoNodeLogHandler(MycoNode n, JTextArea textArea) {
+    this.n = n;
+    this.textArea = textArea;
+    this.formatter = new MiniFormatter();
+    this.changeListeners = new HashSet<ChangeListener>();
+    this.setFormatter(formatter);
+    this.setFilter(makeFilter(n));
+    this.setLevel(Level.FINER);
+    rootLogger.addHandler(this);
+  }
+
+  public void addChangeListener(ChangeListener cl) {
+    changeListeners.add(cl);
+  }
+
+  public void removeChangeListener(ChangeListener cl) {
+    if (changeListeners.contains(cl)) {
+      changeListeners.remove(cl);
     }
+  }
 
-    public void addChangeListener(ChangeListener cl) {
-        changeListeners.add(cl);
+
+  public void update(String message) {
+    textArea.append(message);
+    textArea.setCaretPosition(textArea.getDocument().getLength());
+    for (ChangeListener cl : changeListeners) {
+      cl.stateChanged(new ChangeEvent(this));
     }
+  }
 
-    public void removeChangeListener(ChangeListener cl) {
-        if (changeListeners.contains(cl)) {
-            changeListeners.remove(cl);
+  public void publish(LogRecord r) {
+    String message = null;
+    if (!isLoggable(r)) {
+      return;
+    }
+    try {
+      message = getFormatter().format(r);
+      update(message);
+    } catch (Exception e) {
+      reportError(null, e, ErrorManager.FORMAT_FAILURE);
+    }
+  }
+
+  public void flush() {
+  }
+
+  public void close() {
+  }
+
+  private Filter makeFilter(final MycoNode n) {
+    return new Filter() {
+      public boolean isLoggable(LogRecord r) {
+
+        if (r.getParameters() == null) {
+          return false;
         }
-    }
-
-
-    public void update(String message) {
-        textArea.append(message);
-        textArea.setCaretPosition(textArea.getDocument().getLength());
-        for (ChangeListener cl : changeListeners) {
-            cl.stateChanged(new ChangeEvent(this));
-        }
-    }
-
-    public void publish(LogRecord r) {
-        String message = null;
-        if (!isLoggable(r)) {
-            return;
-        }
-        try {
-            message = getFormatter().format(r);
-            update(message);
-        } catch (Exception e) {
-            reportError(null, e, ErrorManager.FORMAT_FAILURE);
-        }
-    }
-
-    public void flush() {
-    }
-
-    public void close() {
-    }
-
-    private Filter makeFilter(final MycoNode n) {
-        return new Filter() {
-            public boolean isLoggable(LogRecord r) {
-
-                if (r.getParameters() == null) {
-                                  return false;
-                }
-                return Arrays.asList(r.getParameters()).contains(n);
-            }
-        };
-    }
+        return Arrays.asList(r.getParameters()).contains(n);
+      }
+    };
+  }
 }

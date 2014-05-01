@@ -24,8 +24,8 @@ import peersim.config.Configuration;
 
 public class NullInhibitionStrategy implements InhibitionStrategy {
 
-    public boolean apply(MycoNode n, HyphaType t, int switchAttempts) {
-      // Always allow switch if attempted
-      return true;
-    }
+  public boolean apply(MycoNode n, HyphaType t, int switchAttempts) {
+    // Always allow switch if attempted
+    return true;
+  }
 }

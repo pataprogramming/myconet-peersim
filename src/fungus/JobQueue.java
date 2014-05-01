@@ -26,50 +26,50 @@ import com.google.common.collect.Iterables;
 import peersim.core.*;
 
 public class JobQueue extends PriorityQueue<Job> {
-    public int getTotalWorkUnits() {
-        int ret = 0;
-        for (Job j : this) {
-            ret += j.remaining;
-        }
-        return ret;
+  public int getTotalWorkUnits() {
+    int ret = 0;
+    for (Job j : this) {
+      ret += j.remaining;
+    }
+    return ret;
+  }
+
+  // // remove n elements, spaced out through
+  // public JobQueue extract(int n) {
+  // JobQueue ret = new JobQueue();
+  //
+  // LinkedList<Job> temp = new LinkedList<Job>();
+  // Iterables.addAll(temp, this);
+  // this.clear();
+  //
+  // // Select n random items from the list of jobs
+  // Collections.shuffle(temp, CommonState.r);
+  // while ((! temp.isEmpty()) && (ret.size() < n)) {
+  // ret.add(temp.pop());
+  // }
+  //
+  // this.addAll(temp);
+  //
+  // return ret;
+  // }
+
+  // remove n elements, spaced out through
+  public JobQueue extract(int n) {
+    JobQueue ret = new JobQueue();
+
+    LinkedList<Job> temp = new LinkedList<Job>();
+    Iterables.addAll(temp, this);
+    this.clear();
+
+    for (int i = 0; i < temp.size(); i++) {
+      Job j = temp.get(i);
+
+      if ((i < (n * 2.0)) && (i % 2 == 0))
+          ret.add(j);
+      else
+          add(j);
     }
 
-    // // remove n elements, spaced out through
-    // public JobQueue extract(int n) {
-    // JobQueue ret = new JobQueue();
-    //
-    // LinkedList<Job> temp = new LinkedList<Job>();
-    // Iterables.addAll(temp, this);
-    // this.clear();
-    //
-    // // Select n random items from the list of jobs
-    // Collections.shuffle(temp, CommonState.r);
-    // while ((! temp.isEmpty()) && (ret.size() < n)) {
-    // ret.add(temp.pop());
-    // }
-    //
-    // this.addAll(temp);
-    //
-    // return ret;
-    // }
-
-    // remove n elements, spaced out through
-    public JobQueue extract(int n) {
-        JobQueue ret = new JobQueue();
-
-        LinkedList<Job> temp = new LinkedList<Job>();
-        Iterables.addAll(temp, this);
-        this.clear();
-
-        for (int i = 0; i < temp.size(); i++) {
-            Job j = temp.get(i);
-
-            if ((i < (n * 2.0)) && (i % 2 == 0))
-                    ret.add(j);
-            else
-                    add(j);
-        }
-
-        return ret;
-    }
+    return ret;
+  }
 }

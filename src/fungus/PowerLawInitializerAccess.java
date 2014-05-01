@@ -24,16 +24,16 @@ import peersim.core.Node;
 import peersim.dynamics.NodeInitializer;
 
 public class PowerLawInitializerAccess implements NodeInitializer {
-    private final String name;
+  private final String name;
 
-    // Work around some quirks in PeerSim.DynamicNetwork for
-    // the Nodulator
+  // Work around some quirks in PeerSim.DynamicNetwork for
+  // the Nodulator
 
-    public PowerLawInitializerAccess(String name) {
-        this.name = name;
-    }
+  public PowerLawInitializerAccess(String name) {
+    this.name = name;
+  }
 
-    public void initialize(Node n) {
-        PowerLawInitializer.initialize((MycoNode) n);
-    }
+  public void initialize(Node n) {
+    PowerLawInitializer.initialize((MycoNode) n);
+  }
 }

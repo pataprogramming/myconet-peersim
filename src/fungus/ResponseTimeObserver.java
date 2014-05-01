@@ -26,26 +26,26 @@ import peersim.core.Control;
 
 public class ResponseTimeObserver implements Control {
 
-    public static double responseTimeOptimality = 0;
+  public static double responseTimeOptimality = 0;
 
-    private static Logger log = Logger.getLogger(ResponseTimeObserver.class
-                                                 .getName());
+  private static Logger log = Logger.getLogger(ResponseTimeObserver.class
+                                               .getName());
 
-    public ResponseTimeObserver(String s) {
+  public ResponseTimeObserver(String s) {
 
-    }
+  }
 
-    public boolean execute() {
+  public boolean execute() {
 
-        if (JobController.responseTimeManager == null)
-                responseTimeOptimality = Double.NaN;
-        else
-                responseTimeOptimality = JobController.responseTimeManager
-                    .getResponseTimeOptimality();
+    if (JobController.responseTimeManager == null)
+        responseTimeOptimality = Double.NaN;
+    else
+        responseTimeOptimality = JobController.responseTimeManager
+            .getResponseTimeOptimality();
 
-        log.severe("RESPONSE TIME OPTIMALITY : " + responseTimeOptimality);
+    log.severe("RESPONSE TIME OPTIMALITY : " + responseTimeOptimality);
 
-        return false;
-    }
+    return false;
+  }
 
 }

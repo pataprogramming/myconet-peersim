@@ -23,7 +23,7 @@ package fungus;
 import com.google.common.base.Function;
 
 public interface BulwarkStrategy extends Function<MycoNode,Boolean> {
-    public abstract Boolean apply(MycoNode n);
+  public abstract Boolean apply(MycoNode n);
 
-    public double getScalingFactor(); // Scaling for colors in visualizer
+  public double getScalingFactor(); // Scaling for colors in visualizer
 }

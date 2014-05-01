@@ -35,7 +35,7 @@ public class SinglyTypedExtendingStrategy extends SinglyTypedHyphaStrategy {
     // Execute logic common to all hyphal states`
     doCommonDynamics(node, data, link);
 
-        // System.out.println("Do Extending");
+    // System.out.println("Do Extending");
     MycoList hyphae = link.getHyphae();
 
     // Randomly permute order so selections will be random

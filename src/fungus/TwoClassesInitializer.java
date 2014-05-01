@@ -26,46 +26,46 @@ import peersim.core.Network;
 
 public class TwoClassesInitializer implements Control {
 
-	private static final String FRACTION_OF_PRIMARY_NODES = "fraction_of_primary_nodes";
-	private static final String CAPACITY_OF_PRIMARY_NODES = "capacity_of_primary_nodes";
-	private static final String CAPACITY_OF_SECONDARY_NODES = "capacity_of_secondary_nodes";
+  private static final String FRACTION_OF_PRIMARY_NODES = "fraction_of_primary_nodes";
+  private static final String CAPACITY_OF_PRIMARY_NODES = "capacity_of_primary_nodes";
+  private static final String CAPACITY_OF_SECONDARY_NODES = "capacity_of_secondary_nodes";
 
-	private double fractionOfPrimaryNodes;
-	private int capacityOfPrimaryNodes;
-	private int capacityOfSecondaryNodes;
+  private double fractionOfPrimaryNodes;
+  private int capacityOfPrimaryNodes;
+  private int capacityOfSecondaryNodes;
 
-	public TwoClassesInitializer(String name) {
+  public TwoClassesInitializer(String name) {
 
-		fractionOfPrimaryNodes = Configuration.getDouble(name + "."
-				+ FRACTION_OF_PRIMARY_NODES);
+    fractionOfPrimaryNodes = Configuration.getDouble(name + "."
+                                                     + FRACTION_OF_PRIMARY_NODES);
 
-		capacityOfPrimaryNodes = Configuration.getInt(name + "."
-				+ CAPACITY_OF_PRIMARY_NODES);
+    capacityOfPrimaryNodes = Configuration.getInt(name + "."
+                                                  + CAPACITY_OF_PRIMARY_NODES);
 
-		capacityOfSecondaryNodes = Configuration.getInt(name + "."
-				+ CAPACITY_OF_SECONDARY_NODES);
-	}
+    capacityOfSecondaryNodes = Configuration.getInt(name + "."
+                                                    + CAPACITY_OF_SECONDARY_NODES);
+  }
 
-	public boolean execute() {
+  public boolean execute() {
 
-		int numberOfNodesOfTheFirstType = (int) Math
-				.round((Network.size() * fractionOfPrimaryNodes));
+    int numberOfNodesOfTheFirstType = (int) Math
+        .round((Network.size() * fractionOfPrimaryNodes));
 
-		MycoNode n;
-		HyphaData d;
+    MycoNode n;
+    HyphaData d;
 
-		for (int i = 0; i < Network.size(); i++) {
+    for (int i = 0; i < Network.size(); i++) {
 
-			n = (MycoNode) Network.get(i);
-			d = n.getHyphaData();
+      n = (MycoNode) Network.get(i);
+      d = n.getHyphaData();
 
-			if (i < numberOfNodesOfTheFirstType)
-				d.setMax(capacityOfPrimaryNodes);
-			else
-				d.setMax(capacityOfSecondaryNodes);
-		}
+      if (i < numberOfNodesOfTheFirstType)
+          d.setMax(capacityOfPrimaryNodes);
+      else
+          d.setMax(capacityOfSecondaryNodes);
+    }
 
-		return false;
-	}
+    return false;
+  }
 
 }
