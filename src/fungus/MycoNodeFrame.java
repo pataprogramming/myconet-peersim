@@ -212,6 +212,7 @@ public class MycoNodeFrame extends JFrame implements ChangeListener {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void refreshData() {
     stateLabel.setText(data.getState().toString());
     typeLabel.setText(new Integer(data.getType()).toString());
@@ -247,6 +248,7 @@ public class MycoNodeFrame extends JFrame implements ChangeListener {
     Object[] array = link.getNeighbors().toArray();
     Arrays.sort(array);
 
+    // This generates an unchecked warning. TODO: eliminate suppression
     neighborListControl.setListData(array);
     validate();
   }

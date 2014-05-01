@@ -156,7 +156,7 @@ public class JungObserver implements Control {
     visualizer.getRenderContext().setVertexFillPaintTransformer(nodeFillRenderer);
     visualizer.getRenderContext().setVertexShapeTransformer(shapeTransformer);
     visualizer.getRenderContext().setVertexLabelTransformer(nodeLabeller);
-    visualizer.setVertexToolTipTransformer(new ToStringLabeller());
+    visualizer.setVertexToolTipTransformer(new ToStringLabeller<MycoNode>());
     visualizer.getRenderContext().setEdgeStrokeTransformer(edgeStrokeTransformer);
     frame = new JFrame();
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
